@@ -1,0 +1,21 @@
+{
+  "name": "maimai-order-calc",
+  "version": "2.8.0",
+  "description": "麦麦点前算 - 麦当劳点餐前方案比较（含官方 MCP 数据代理）",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "mcdonalds",
+    "meal-planner",
+    "mcp",
+    "mobile-first",
+    "workbuddy-skill"
+  ]
+}

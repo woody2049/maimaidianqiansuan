@@ -1,0 +1,3736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F4F5F7"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2215%22%20fill=%22%23DA291C%22/%3E%3Cg%20font-family=%22PingFang%20SC,Hiragino%20Sans%20GB,Microsoft%20YaHei,sans-serif%22%20font-weight=%22800%22%20text-anchor=%22middle%22%3E%3Ctext%20x=%2232%22%20y=%2228%22%20font-size=%2219%22%20fill=%22%23FFF8EC%22%3E%E9%BA%A6%E9%BA%A6%3C/text%3E%3Ctext%20x=%2232%22%20y=%2249%22%20font-size=%2219%22%20fill=%22%23FFC72C%22%3E%E7%82%B9%E5%89%8D%E7%AE%97%3C/text%3E%3C/g%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2215%22%20fill=%22%23DA291C%22/%3E%3Cg%20font-family=%22PingFang%20SC,Hiragino%20Sans%20GB,Microsoft%20YaHei,sans-serif%22%20font-weight=%22800%22%20text-anchor=%22middle%22%3E%3Ctext%20x=%2232%22%20y=%2228%22%20font-size=%2219%22%20fill=%22%23FFF8EC%22%3E%E9%BA%A6%E9%BA%A6%3C/text%3E%3Ctext%20x=%2232%22%20y=%2249%22%20font-size=%2219%22%20fill=%22%23FFC72C%22%3E%E7%82%B9%E5%89%8D%E7%AE%97%3C/text%3E%3C/g%3E%3C/svg%3E"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="麦麦点前算"/>
+<title>麦麦点前算 · 点餐之前，先把选择算清楚</title>
+<style>
+:root{
+  --red:#DA291C; --gold:#FFC72C; --ink:#1D1F26; --ink2:#5C626E; --ink3:#989EAA;
+  --line:#E6E8EE; --line-soft:#ECEEF2; --bg:#F4F5F7; --panel:#F7F8FA; --cream:#FFF8EC;
+  --green:#0F7B52; --blue:#1A56DB; --purple:#6D28D9;
+  --r:20px; --safe: env(safe-area-inset-bottom, 0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  background:var(--bg); color:var(--ink); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;height:320px;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(64% 88% at 14% -14%,rgba(255,199,44,.14) 0%,rgba(255,199,44,0) 58%),
+    radial-gradient(56% 76% at 96% -10%,rgba(218,41,28,.05) 0%,rgba(218,41,28,0) 52%);
+}
+body.lock{overflow:hidden}
+.app{max-width:480px;margin:0 auto;padding:0 20px 158px;position:relative;z-index:1}
+.hide{display:none!important}
+
+/* ---------- 顶栏 / 字标 ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 16px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{
+  width:42px;height:42px;flex:none;border-radius:12px;background:var(--red);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  box-shadow:3px 3px 0 var(--gold);
+}
+.brand-mark i{
+  font-style:normal;font-size:11.5px;font-weight:800;line-height:1.05;letter-spacing:-.3px;
+  color:var(--cream);
+}
+.brand-mark i:last-child{color:var(--gold)}
+.brand-txt{min-width:0;display:flex;flex-direction:column;gap:4px}
+.wordmark{
+  display:flex;align-items:flex-end;gap:0;margin:0;
+  font-size:17.5px;font-weight:800;letter-spacing:-.7px;line-height:1.15;white-space:nowrap;
+}
+.wordmark span{display:block}
+.wordmark .wm-red{color:var(--red)}
+.wordmark .wm-dot{width:5px;height:5px;border-radius:50%;background:var(--red);flex:none;margin:0 0 4px 2px}
+.wm-rule{display:block;height:2.5px;border-radius:2px;background:var(--gold)}
+.brand p{margin:0;font-size:10.5px;color:var(--ink3);letter-spacing:.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cloud-chip{
+  display:flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;
+  border-radius:999px;padding:8px 12px;font-size:12px;color:var(--ink2);font-family:inherit;flex:none;
+  max-width:150px;
+}
+.cloud-chip i{width:6px;height:6px;border-radius:50%;background:#C6CCD7;flex:none}
+.cloud-chip.on i{background:#12B76A;box-shadow:0 0 0 3px rgba(18,183,106,.14)}
+.cloud-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- 卡片 ---------- */
+.card{
+  background:#fff;border-radius:var(--r);padding:16px;
+  border:1px solid var(--line-soft);
+  box-shadow:0 1px 2px rgba(29,31,38,.03),0 10px 24px -18px rgba(29,31,38,.18);
+  margin-bottom:13px;
+}
+.card-warm{
+  background:linear-gradient(180deg,#FFFCF3 0%,#FFF8EC 100%);
+  border-color:#F2E5C8;
+  box-shadow:0 1px 2px rgba(154,103,0,.04),0 12px 26px -18px rgba(154,103,0,.22);
+}
+.card-warm .h2-r{color:#B08A45}
+.card-warm .gp{padding-left:16px}
+.card-warm .gp::before{width:4px;box-shadow:0 0 0 3px rgba(255,255,255,.6)}
+.h2{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 12px}
+.h2 > span:first-child{font-size:16.5px;font-weight:700;letter-spacing:-.1px}
+.h2-r{font-size:12px;color:var(--ink3);font-weight:400}
+
+/* ---------- 首页 hero ---------- */
+.hero{padding:10px 0 2px}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#9A6700;
+  background:#FFF6DE;border:1px solid #F5E3AC;padding:5px 12px;border-radius:999px;font-weight:600;letter-spacing:.2px;
+}
+.hero-eyebrow::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 0 3px rgba(218,41,28,.13);flex:none;
+}
+.hero h1{margin:14px 0 0;font-size:30px;line-height:1.46;font-weight:800;letter-spacing:-1px}
+.hero h1 em{
+  font-style:normal;color:var(--red);padding:0 2px;
+  background:linear-gradient(180deg,rgba(255,199,44,0) 58%,rgba(255,199,44,.55) 58%,rgba(255,199,44,.55) 93%,rgba(255,199,44,0) 93%);
+}
+.hero p{margin:10px 0 20px;font-size:14.5px;color:var(--ink2);line-height:1.72;max-width:330px}
+.hero .btn-primary{width:100%;height:58px;font-size:17.5px}
+
+.quick-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:15px 0 13px}
+.q-card{
+  text-align:left;background:#fff;border:1px solid var(--line-soft);border-radius:18px;padding:14px 15px;
+  font-family:inherit;box-shadow:0 1px 2px rgba(29,31,38,.03),0 10px 22px -18px rgba(29,31,38,.22);
+  display:flex;flex-direction:column;gap:4px;min-width:0;
+}
+.q-card:active{transform:scale(.985)}
+.q-label{font-size:11.5px;color:var(--ink3);letter-spacing:.8px}
+.q-card strong{font-size:15.5px;font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-sub{font-size:11.5px;color:var(--ink3)}
+
+.group-preview{display:flex;flex-direction:column;gap:13px}
+.gp{display:flex;gap:11px;align-items:flex-start;padding-left:15px;position:relative}
+.gp::before{content:'';position:absolute;left:0;top:2px;bottom:2px;width:4px;border-radius:2px;background:var(--tone);opacity:.9}
+.gp b{display:block;font-size:14.5px;font-weight:700;letter-spacing:-.1px}
+.gp span{display:block;font-size:12.5px;color:var(--ink3);margin-top:1px;line-height:1.5}
+
+/* ---------- 表单 ---------- */
+.budget-display{display:flex;align-items:baseline;gap:3px;margin:2px 0 2px}
+.budget-display .cur{font-size:19px;font-weight:500;color:var(--ink2);transform:translateY(-2px)}
+.budget-display b{font-size:40px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1.05}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent;margin:8px 0 0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{
+  height:6px;border-radius:99px;
+  background:linear-gradient(90deg,var(--gold) 0%,var(--gold) var(--p,40%),#EDEFF3 var(--p,40%),#EDEFF3 100%);
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;
+  border:3px solid var(--red);box-shadow:0 3px 9px rgba(218,41,28,.28);margin-top:-9px;
+}
+.range-ticks{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink3);margin-top:0}
+.quick{display:flex;gap:7px;margin-top:12px}
+.quick button{
+  flex:1;min-width:46px;padding:0 4px;height:48px;border-radius:12px;border:1px solid var(--line);background:#fff;
+  font-size:15px;color:var(--ink2);font-family:inherit;font-weight:600;transition:.15s;
+}
+.quick button.on{background:#FFF3F1;border-color:#F3B8B1;color:var(--red)}
+
+.select-wrap{position:relative;display:flex;align-items:center;min-height:54px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:0 26px 0 14px}
+.select{
+  width:100%;appearance:none;-webkit-appearance:none;border:none;background:transparent;
+  font-size:17px;font-weight:650;color:var(--ink);padding:0;line-height:1.5;
+  font-family:inherit;letter-spacing:0;
+}
+.chev{position:absolute;right:12px;top:50%;transform:translateY(-58%);color:var(--ink3);font-size:15px;pointer-events:none}
+.meta{margin-top:7px;font-size:12.5px;color:var(--ink3);display:flex;gap:10px;flex-wrap:wrap}
+
+.seg{display:flex;background:#F1F2F6;border-radius:13px;padding:3px;gap:2px}
+.seg button{
+  flex:1;height:46px;border:none;background:transparent;border-radius:11px;font-family:inherit;
+  font-size:15px;color:var(--ink2);font-weight:600;transition:.16s;padding:0 4px;
+}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(29,31,38,.12)}
+.seg-desc{margin-top:11px;font-size:13px;color:var(--ink3);line-height:1.65}
+
+.chip-group{margin-bottom:13px}
+.chip-group:last-child{margin-bottom:0}
+.cg-label{font-size:11.5px;color:var(--ink3);letter-spacing:1.6px;margin-bottom:8px;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;
+  min-height:46px;padding:9px 14px;border-radius:999px;font-size:14.5px;color:var(--ink);font-family:inherit;
+  line-height:1.2;transition:.14s;max-width:100%;
+}
+.chip em{font-style:normal;font-size:12px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.chip.on{background:#FFF1EF;border-color:#F0A9A1;color:var(--red);font-weight:600}
+.chip.on em{color:#C0564C}
+.chip-avoid.on{background:#F1F2F6;border-color:#CBD2DE;color:var(--ink2);text-decoration:line-through;box-shadow:none}
+.chip[disabled]{opacity:.36;text-decoration:none}
+.chip:active{transform:scale(.97)}
+
+/* ---------- 按钮 ---------- */
+.btn-primary{
+  border:none;border-radius:16px;font-family:inherit;font-weight:600;color:#fff;
+  background:var(--red);letter-spacing:.5px;
+  box-shadow:0 4px 0 #B01B10,0 14px 26px -16px rgba(218,41,28,.8);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.btn-primary:active{transform:translateY(3px);box-shadow:0 1px 0 #B01B10,0 6px 12px -10px rgba(218,41,28,.7)}
+.btn-primary[disabled]{background:#C9CED8;box-shadow:none;color:#fff;transform:none}
+.btn-ghost{
+  border-radius:13px;border:1px solid var(--line);background:#fff;
+  font-family:inherit;font-weight:600;color:var(--ink2);
+}
+.btn-ghost:active{background:#F6F7F9}
+.btn-ghost[disabled]{color:#B4BBC7;background:#F7F8FA;border-color:#EEF0F4;box-shadow:none}
+.icon-btn{
+  width:44px;height:44px;flex:none;border-radius:13px;border:1px solid var(--line);background:#fff;
+  font-size:19px;color:var(--ink);display:grid;place-items:center;font-family:inherit;
+}
+
+/* ---------- 底部操作条 ---------- */
+.bottombar{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;
+  padding:12px 20px calc(12px + var(--safe));
+  background:rgba(255,255,255,.94);backdrop-filter:saturate(180%) blur(14px);
+  border-top:1px solid var(--line-soft);
+  box-shadow:0 -8px 24px -18px rgba(29,31,38,.28);
+}
+.bb-inner{max-width:480px;margin:0 auto}
+.bb-inner .btn-primary{width:100%;height:58px;font-size:17.5px}
+.bb-row{display:flex;gap:8px;margin-bottom:9px}
+.bb-row button{flex:1;height:48px;font-size:14.5px;padding:0 4px;border-radius:14px}
+.bb-row button:active{background:#F6F7F9}
+
+/* ---------- 结果页头部 ---------- */
+.res-head{display:flex;align-items:center;gap:12px;padding:14px 0 12px}
+.res-head h2{margin:0;font-size:21px;font-weight:800;letter-spacing:-.5px}
+.res-head p{margin:2px 0 0;font-size:12.5px;color:var(--ink3)}
+.res-sum{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px}
+.tagp{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);padding:7px 12px;border-radius:999px}
+.tagp.tag-demo{color:#9A6700;background:#FFF6DE;border-color:#F5E3AC;font-weight:600}
+.warn{
+  display:flex;gap:9px;padding:12px 14px;border-radius:14px;background:#FFF7E6;border:1px solid #FBE2AE;
+  font-size:13px;color:#8A5A00;line-height:1.55;margin-bottom:12px;
+}
+
+/* ---------- 无解状态 ---------- */
+.ns-card{
+  background:#fff;border-radius:20px;padding:16px;margin-bottom:13px;
+  border:1px solid var(--line-soft);
+  box-shadow:0 1px 2px rgba(29,31,38,.03),0 12px 28px -20px rgba(29,31,38,.28);
+}
+.ns-head{display:flex;gap:11px;align-items:flex-start}
+.ns-ico{
+  width:36px;height:36px;border-radius:12px;background:#FDECE9;color:var(--red);flex:none;
+  display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;
+}
+.ns-head h3{margin:0;font-size:17px;font-weight:700;letter-spacing:-.3px;line-height:1.45}
+.ns-head p{margin:5px 0 0;font-size:13px;color:var(--ink3);line-height:1.65}
+.ns-list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ns-list li{background:#FFF8F7;border:1px solid #FBE2DE;border-radius:12px;padding:10px 11px}
+.ns-list .ns-t{font-size:13.5px;font-weight:700;color:#8E2318;display:flex;gap:6px;align-items:center;line-height:1.5}
+.ns-list .ns-t em{
+  font-style:normal;font-size:9.5px;font-weight:700;color:#B4524A;background:#FBE6E3;
+  border-radius:5px;padding:1px 5px;flex:none;letter-spacing:.2px;
+}
+.ns-list .ns-d{font-size:12.5px;color:#7A4A44;margin-top:3px;line-height:1.6}
+.ns-act-title{font-size:12px;color:var(--ink3);margin:16px 0 8px;letter-spacing:1px}
+.ns-acts{display:flex;flex-direction:column;gap:7px}
+.ns-act{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:12px;min-height:60px;
+  border-radius:12px;border:1px solid var(--line);background:#fff;font-family:inherit;
+  transition:transform .12s,background .12s;
+}
+.ns-act:active{transform:scale(.99);background:#FAFBFC}
+.ns-act .n{
+  width:24px;height:24px;border-radius:8px;background:#F3F4F7;color:var(--ink2);
+  font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;
+}
+.ns-act .tx{flex:1;min-width:0}
+.ns-act b{display:block;font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.4}
+.ns-act span{display:block;font-size:12px;color:var(--ink3);margin-top:2px;line-height:1.5}
+.ns-act .go{font-size:12.5px;font-weight:700;color:var(--red);flex:none;white-space:nowrap}
+.ns-act[disabled]{opacity:.55;background:#FAFBFC}
+.ns-act[disabled] .go{color:#A6AEBB;font-weight:600}
+.ns-act[disabled] .n{background:#F1F2F5;color:#B3BAC6}
+.ns-note{font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:12px;padding-top:11px;border-top:1px solid var(--line-soft)}
+
+/* ---------- 方案卡 ---------- */
+.pcard{
+  position:relative;background:#fff;border-radius:20px;padding:16px;margin-bottom:13px;
+  border:1px solid var(--line-soft);
+  box-shadow:0 1px 2px rgba(29,31,38,.03),0 12px 28px -20px rgba(29,31,38,.28);
+}
+.pcard-head{display:flex;align-items:center;gap:8px}
+.pcard-badge{
+  font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:8px;letter-spacing:.5px;
+  background:var(--soft);color:var(--tone);
+}
+.pcard-idx{margin-left:auto;font-size:11px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.pcard-title{margin:9px 0 0;font-size:17px;font-weight:700;line-height:1.5;letter-spacing:-.2px}
+.items{list-style:none;margin:2px 0 0;padding:0}
+.items-title{margin:12px 0 1px;padding-top:0;border-top:none;font-size:11.5px;color:var(--ink3);letter-spacing:1.2px;font-weight:600}
+.items li{display:flex;align-items:baseline;gap:8px;font-size:14.5px;padding:4px 0}
+.it-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink2)}
+.it-kcal{font-size:12.5px;color:var(--ink3);font-variant-numeric:tabular-nums;flex:none}
+.it-kcal::after{content:' ·'}
+.it-price{font-size:13px;color:var(--ink3);font-variant-numeric:tabular-nums;flex:none;min-width:0;text-align:right}
+
+.money{display:flex;margin-top:12px;background:var(--panel);border:none;border-radius:14px;overflow:hidden}
+.money div{flex:1;padding:13px 4px;text-align:center;border-right:none}
+.money span{display:block;font-size:11.5px;color:var(--ink3);letter-spacing:.4px}
+.money b{display:block;font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:3px;letter-spacing:-.3px}
+.money .off b{color:var(--green)}
+.money .pay b{color:var(--red);font-size:23px;font-weight:800}
+.money-foot{font-size:12px;color:var(--ink3);margin-top:8px;display:flex;gap:10px;flex-wrap:wrap}
+
+.nutr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:11px}
+.nutr-grid div{background:#F6F7F9;border-radius:11px;padding:9px 3px;text-align:center}
+.nutr-grid b{display:block;font-size:16.5px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.2px}
+.nutr-grid span{display:block;font-size:11px;color:var(--ink3);margin-top:2px}
+.nutr-grid em{display:block;font-size:10.5px;font-style:normal;color:#A2A8B4;margin-top:2px;font-variant-numeric:tabular-nums}
+.nutr-grid em.ok{color:var(--green)}
+.nutr-grid em.hi{color:#B45309}
+
+.reason{margin-top:11px;background:#FBFAF5;border:1px solid #F0EDE2;border-radius:12px;padding:12px}
+.reason span{font-size:11px;color:#9A8C63;letter-spacing:1.5px;font-weight:700}
+.reason p{margin:4px 0 0;font-size:13.5px;color:#5A5340;line-height:1.75}
+
+/* ---------- 弹层 ---------- */
+.sheet{position:fixed;inset:0;z-index:80;display:none}
+.sheet.on{display:block}
+.sheet-bg{position:absolute;inset:0;background:rgba(29,31,38,.42);backdrop-filter:blur(2px);opacity:0;transition:.24s}
+.sheet.on .sheet-bg{opacity:1}
+.sheet-panel{
+  position:absolute;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;
+  background:#fff;border-radius:22px 22px 0 0;max-height:88vh;overflow-y:auto;
+  padding:8px 20px calc(20px + var(--safe));transform:translateY(100%);transition:transform .28s cubic-bezier(.22,.9,.24,1);
+  box-shadow:0 -12px 40px -12px rgba(29,31,38,.3);
+}
+.sheet.on .sheet-panel{transform:translateY(0)}
+.grab{width:38px;height:4px;border-radius:99px;background:#DDD8CE;margin:6px auto 14px}
+.sheet h2{margin:0;font-size:21px;font-weight:800;letter-spacing:-.5px}
+.sheet-sub{margin:5px 0 0;font-size:13px;color:var(--ink3);line-height:1.6}
+.sheet-x{
+  position:absolute;right:14px;top:14px;width:40px;height:40px;border-radius:50%;border:none;
+  background:#F1F2F6;color:var(--ink2);font-size:16px;font-family:inherit;line-height:1;
+}
+.field{margin-top:14px}
+.field label{display:block;font-size:12.5px;color:var(--ink3);margin-bottom:6px;font-weight:600;letter-spacing:.3px}
+.input-row{display:flex;gap:8px}
+.input{
+  flex:1;height:52px;border:1px solid var(--line);border-radius:13px;padding:0 14px;font-size:17px;
+  font-family:inherit;color:var(--ink);background:#fff;min-width:0;
+}
+.input:focus{outline:none;border-color:#F0A9A1;box-shadow:0 0 0 3px rgba(218,41,28,.08)}
+.btn-mini{
+  height:52px;padding:0 15px;border-radius:13px;border:none;background:#FFF1EF;color:var(--red);
+  font-family:inherit;font-size:14px;font-weight:600;flex:none;
+}
+.btn-mini[disabled]{background:#F1F2F6;color:#A9B0BC}
+.sheet-actions{display:flex;gap:9px;margin-top:18px}
+.sheet-actions .btn-primary{flex:1;height:52px;font-size:16px}
+
+/* ---------- 城市选择 ---------- */
+.city-pick{
+  display:flex;align-items:center;gap:11px;width:100%;min-height:58px;text-align:left;font-family:inherit;color:var(--ink);
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;
+}
+.city-pick:active{transform:scale(.99)}
+.cp-pin{
+  width:30px;height:30px;border-radius:9px;flex:none;display:grid;place-items:center;
+  background:#FFF3F1;color:var(--red);font-size:15px;
+}
+.cp-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.cp-main b{font-size:15.5px;font-weight:700;letter-spacing:-.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-main i{font-style:normal;font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-act{flex:none;font-size:11.5px;font-weight:600;color:var(--red);background:#FFF3F1;border-radius:999px;padding:5px 10px}
+
+.city-hot{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+.city-hot button{
+  border:1px solid var(--line);background:#fff;border-radius:999px;padding:11px 15px;font-size:14.5px;
+  font-family:inherit;color:var(--ink2);font-weight:600;
+}
+.city-hot button.on{background:#FFF3F1;border-color:#F3B8B1;color:var(--red)}
+.city-list{
+  margin-top:8px;max-height:44vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  border-top:1px solid #F3F0E9;overscroll-behavior:contain;
+}
+.prov-h{
+  position:sticky;top:0;z-index:1;background:#fff;padding:10px 2px 5px;
+  font-size:10.5px;color:var(--ink3);letter-spacing:1.4px;font-weight:700;
+}
+.city-item{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:56px;
+  border:none;border-bottom:1px solid #F6F4EF;background:transparent;padding:14px 2px;
+  font-family:inherit;font-size:16px;color:var(--ink);text-align:left;
+}
+.city-item:active{background:#F6F7F9}
+.city-item b{font-weight:600}
+.city-item em{font-style:normal;font-size:12px;color:var(--ink3);flex:none}
+.city-item.on b{color:var(--red);font-weight:700}
+.city-item.on em{color:var(--red)}
+.city-empty{padding:26px 0;text-align:center;font-size:13px;color:var(--ink3)}
+.sheet-actions .btn-ghost{height:52px;flex:1;font-size:15px}
+.fine{font-size:11.5px;color:var(--ink3);line-height:1.7;margin-top:14px;padding-top:13px;border-top:1px solid var(--line-soft)}
+.err{font-size:12.5px;color:var(--red);margin-top:8px;line-height:1.45;min-height:0}
+
+/* ---------- 登录 ---------- */
+.login-tabs{display:flex;gap:6px;margin-top:16px;background:#F1F2F6;border-radius:11px;padding:3px}
+.login-tabs button{
+  flex:1;height:36px;border:none;border-radius:9px;background:transparent;color:var(--ink2);
+  font-family:inherit;font-size:13px;font-weight:600;transition:.15s;
+}
+.login-tabs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(29,31,38,.10)}
+.phone-wrap{flex:1;display:flex;align-items:center;height:52px;border:1px solid var(--line);border-radius:13px;background:#fff;padding-left:14px;min-width:0}
+.phone-wrap:focus-within{border-color:#F0A9A1;box-shadow:0 0 0 3px rgba(218,41,28,.08)}
+.phone-cc{font-size:16px;color:var(--ink2);font-weight:600;padding-right:8px;border-right:1px solid var(--line);flex:none}
+.phone-wrap .input{border:none;height:50px;padding-left:10px;background:transparent}
+.phone-wrap .input:focus{box-shadow:none}
+.or{display:flex;align-items:center;gap:10px;margin:18px 0 12px;font-size:11px;color:var(--ink3)}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+.btn-wechat{
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;
+  border:none;border-radius:12px;background:#07C160;color:#fff;font-family:inherit;font-size:15px;font-weight:700;
+}
+.btn-wechat:active{background:#06AD56}
+.btn-wechat[disabled]{background:#D7F2E4;color:#8FBFA6}
+.wx-ico{width:20px;height:20px;flex:none}
+.login-hint{font-size:12px;color:var(--ink3);margin-top:8px;line-height:1.6;text-align:center}
+
+/* ---------- 真实门店（麦当劳官方 MCP） ---------- */
+.store-more{
+  display:flex;align-items:center;gap:5px;width:100%;margin-top:8px;padding:10px 2px;min-height:44px;
+  border:none;background:none;font-family:inherit;font-size:13px;color:var(--ink2);text-align:left;
+}
+.store-more .sm-plus{color:var(--red);font-weight:800;font-size:14px;line-height:1}
+.store-more:active{opacity:.55}
+.real-bar{
+  display:flex;align-items:center;gap:8px;margin-top:6px;padding:10px 12px;border-radius:12px;
+  background:#F1F5F1;font-size:12.5px;line-height:1.5;color:var(--ink2);
+}
+.real-bar .rb-dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--green)}
+.real-bar .rb-main{flex:1;min-width:0}
+.real-bar .rb-main b{color:var(--ink);font-weight:650}
+.real-bar .rb-act{
+  border:none;background:none;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--red);
+  flex:none;padding:6px 0 6px 4px;
+}
+.real-bar.run{background:#EFF3FD;color:#3C4A6B}
+.real-bar.run .rb-dot{background:var(--blue);animation:rbPulse 1s infinite}
+.real-bar.warn{background:#FFF6E8;color:#8A5200}
+.real-bar.warn .rb-dot{background:#E08E0B}
+@keyframes rbPulse{0%,100%{opacity:1}50%{opacity:.2}}
+.real-quick{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.real-quick button{
+  border:1px solid var(--line-soft);background:#fff;border-radius:999px;padding:6px 11px;
+  font-family:inherit;font-size:11.5px;color:var(--ink2);
+}
+.real-quick button:active{border-color:var(--red);color:var(--red)}
+.real-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;max-height:42vh;overflow:auto}
+.real-item{
+  display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;padding:12px 13px;border-radius:12px;
+  border:1px solid var(--line-soft);background:#fff;font-family:inherit;cursor:pointer;min-height:56px;
+}
+.real-item:active{border-color:var(--red);background:#FFF7F6}
+.real-item .ri-n{display:block;font-size:14px;font-weight:700;color:var(--ink);line-height:1.35}
+.real-item .ri-m{display:block;font-size:12px;color:var(--ink3);margin-top:3px;line-height:1.45}
+.real-item .ri-k{font-size:12px;color:var(--ink3);flex:none;margin-left:auto;text-align:right}
+.real-empty{margin-top:12px;padding:14px 15px;border-radius:12px;background:#F6F7F9;font-size:13px;color:var(--ink2);line-height:1.7}
+.real-empty b{color:var(--ink);font-weight:650}
+.real-empty button{
+  margin-top:9px;border:1px solid var(--line);background:#fff;border-radius:9px;height:34px;padding:0 14px;
+  font-family:inherit;font-size:12px;font-weight:600;color:var(--ink);
+}
+.off-check{
+  margin-top:12px;width:100%;height:46px;border-radius:10px;border:1px dashed var(--tone);
+  background:var(--soft);color:var(--tone);font-family:inherit;font-size:13.5px;font-weight:700;
+}
+.off-check[disabled]{opacity:.6}
+.off-result{margin-top:10px;padding:11px 13px;border-radius:11px;background:#F6F7F9;font-size:12.5px;color:var(--ink2);line-height:1.6}
+.off-result b{color:var(--ink)}
+.off-result .diff{color:var(--red)}
+.off-result .same{color:var(--green)}
+.off-result .pending{color:var(--blue)}
+.off-note{font-size:11.5px;color:var(--ink3);margin-top:8px;line-height:1.7}
+.audit-bar{
+  display:flex;gap:7px;align-items:flex-start;margin:0 0 12px;padding:10px 12px;border-radius:11px;
+  font-size:12.5px;line-height:1.55;background:#F1F2F6;color:var(--ink2);
+}
+.audit-bar .dot{width:6px;height:6px;border-radius:50%;background:var(--ink3);flex:none;margin-top:6px}
+.audit-bar.run{background:#EEF2FF;color:#1A3FA8}
+.audit-bar.run .dot{background:var(--blue);animation:blink 1s infinite}
+.audit-bar.ok{background:#E9F7F0;color:#0B6A45}
+.audit-bar.ok .dot{background:var(--green)}
+.audit-bar.diff{background:#FFF5E6;color:#8A5200}
+.audit-bar.diff .dot{background:#E08A00}
+.audit-bar.off{background:#F1F2F6;color:var(--ink3)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.hist{list-style:none;margin:0;padding:0}
+.hist li{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #F6F4EF}
+.hist li:last-child{border-bottom:none}
+.hist .h-main{flex:1;min-width:0}
+.hist .h-top{display:flex;align-items:center;gap:6px}
+.hist .h-group{font-size:11px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--soft);color:var(--tone);flex:none}
+.hist .h-title{font-size:14px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist .h-sub{font-size:12px;color:var(--ink3);margin-top:3px}
+.hist .h-pay{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+.hist .h-del{border:none;background:none;color:#B9C0CC;font-size:16px;padding:0 4px;font-family:inherit;flex:none;min-width:32px;min-height:32px}
+.steps{counter-reset:s;margin:14px 0 0;padding:0;list-style:none}
+.steps li{position:relative;padding:0 0 14px 30px;font-size:14px;color:var(--ink2);line-height:1.55}
+.steps li::before{
+  counter-increment:s;content:counter(s);position:absolute;left:0;top:0;width:21px;height:21px;border-radius:50%;
+  background:#FFF1EF;color:var(--red);font-size:11.5px;font-weight:700;display:grid;place-items:center;
+}
+.steps li:last-child{padding-bottom:2px}
+.steps b{color:var(--ink);font-weight:650}
+.copybox{
+  margin-top:6px;background:#F6F7F9;border:1px dashed #D9DDE5;border-radius:12px;padding:12px;
+  font-size:12.5px;color:var(--ink2);line-height:1.7;white-space:pre-wrap;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;max-height:170px;overflow:auto;
+}
+.link-btn{
+  display:flex;align-items:center;justify-content:center;height:54px;border-radius:14px;flex:1;
+  background:var(--red);color:#fff;text-decoration:none;font-size:16px;font-weight:600;
+  box-shadow:0 10px 20px -14px rgba(218,41,28,.9);
+}
+.toast{
+  position:fixed;left:50%;bottom:132px;transform:translate(-50%,10px);z-index:200;
+  background:rgba(29,31,38,.94);color:#fff;font-size:13px;padding:10px 16px;border-radius:999px;
+  opacity:0;pointer-events:none;transition:.22s;max-width:80vw;text-align:center;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.algo{margin-top:2px}
+.algo summary{list-style:none;cursor:pointer;font-size:13px;color:var(--ink3);display:flex;align-items:center;gap:5px;padding:12px 0}
+.algo summary::-webkit-details-marker{display:none}
+.algo summary::before{content:'▸';font-size:10px;transition:.2s}
+.algo[open] summary::before{transform:rotate(90deg)}
+.algo-body{font-size:12.5px;color:var(--ink3);line-height:1.75;padding:2px 0 4px}
+.algo-body b{color:var(--ink2);font-weight:650}
+@media (max-width:360px){
+  .hero h1{font-size:27px}
+  .nutr-grid b{font-size:12.5px}
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><i>麦麦</i><i>点前算</i></span>
+      <div class="brand-txt">
+        <h1 class="wordmark"><span>麦麦</span><span class="wm-red">点前算</span><i class="wm-dot" aria-hidden="true"></i></h1>
+        <span class="wm-rule" aria-hidden="true"></span>
+        <p>点餐之前，先把选择算清楚</p>
+      </div>
+    </div>
+    <button class="cloud-chip" id="cloudChip"><i></i><span id="cloudChipText">本机保存</span></button>
+  </header>
+
+  <!-- ================= 首页 ================= -->
+  <main id="screenHome" class="screen">
+    <section class="hero">
+      <span class="hero-eyebrow">麦当劳点单前的计算器</span>
+      <h1>点餐之前，<br>先把<em>选择</em>算清楚</h1>
+      <p>把预算、优惠券和营养目标一起算进去，摆出三组能直接下单的搭配，你只管挑一组。</p>
+      <button class="btn-primary" id="homeStart">开始算方案</button>
+    </section>
+
+    <div class="quick-row">
+      <button class="q-card" id="homeRules">
+        <span class="q-label">上次的规则</span>
+        <strong id="qRulesText">—</strong>
+        <span class="q-sub" id="qRulesSub">点一下直接复用</span>
+      </button>
+      <button class="q-card" id="homeHistory">
+        <span class="q-label">我的方案</span>
+        <strong id="qHistoryText">0 个</strong>
+        <span class="q-sub">查看已保存的历史</span>
+      </button>
+    </div>
+
+    <section class="card card-warm">
+      <div class="h2"><span>会给你三组方案</span><span class="h2-r">同一个预算，三种取舍</span></div>
+      <div class="group-preview">
+        <div class="gp" style="--tone:#0F7B52"><div><b>预算优先</b><span>尽量少花钱，同时保证吃得饱</span></div></div>
+        <div class="gp" style="--tone:#1A56DB"><div><b>营养参考优先</b><span>贴合你设定的热量与蛋白质目标</span></div></div>
+        <div class="gp" style="--tone:#6D28D9"><div><b>口味优先</b><span>想吃的都带上，吃得最满足</span></div></div>
+      </div>
+    </section>
+    <p class="fine" id="homeFine" style="border:none;padding-top:0">价格为示例数据，不同城市与门店会有差异；营养值为估算。最终价格、优惠与库存以麦当劳官方 App 为准，本工具不代下单。</p>
+  </main>
+
+  <!-- ================= 设置 ================= -->
+  <main id="screenSetup" class="screen hide">
+    <div class="res-head">
+      <button class="icon-btn" id="setupBack" aria-label="返回">←</button>
+      <div><h2>设置条件</h2><p>这些条件会记住，下次直接复用</p></div>
+    </div>
+
+    <section class="card">
+      <div class="h2"><span>预算上限</span><span class="h2-r">这一餐最多花多少</span></div>
+      <div class="budget-display"><span class="cur">¥</span><b id="budgetNum">30</b></div>
+      <input id="budgetRange" type="range" min="12" max="80" step="1" value="30"/>
+      <div class="range-ticks"><span>¥12</span><span>¥45</span><span>¥80</span></div>
+      <div class="quick" id="quickBudget"></div>
+    </section>
+
+    <section class="card">
+      <div class="h2"><span>门店</span><span class="h2-r">决定在售与出餐</span></div>
+      <button type="button" class="city-pick" id="cityPick">
+        <span class="cp-pin">◎</span>
+        <span class="cp-main"><b id="cityTitle">上海</b><i id="citySub">6 家门店</i></span>
+        <span class="cp-act">切换城市</span>
+      </button>
+      <div class="select-wrap" style="margin-top:12px">
+        <select id="storeSelect" class="select" aria-label="选择门店"></select>
+        <span class="chev">⌄</span>
+      </div>
+      <button type="button" class="store-more" id="btnMoreStore">
+        <span class="sm-plus">＋</span><span>列表里没有？搜这个城市的真实门店</span>
+      </button>
+      <div class="real-bar hide" id="realBar"></div>
+      <div class="meta" id="storeMeta"></div>
+      <div class="meta" id="menuStat" style="margin-top:4px;color:var(--ink3)"></div>
+    </section>
+
+    <section class="card">
+      <div class="h2"><span>取餐方式</span><span class="h2-r">外送会加配送费</span></div>
+      <div class="seg" id="segPickup">
+        <button data-v="pickup">到店自取</button>
+        <button data-v="delivery">外送</button>
+        <button data-v="drivethru">得来速</button>
+      </div>
+      <div class="seg-desc" id="pickupDesc"></div>
+    </section>
+
+    <section class="card">
+      <div class="h2"><span>想吃的餐品</span><span class="h2-r">必选 · 最多 3 个</span></div>
+      <div id="wantGroups"></div>
+    </section>
+
+    <section class="card">
+      <div class="h2"><span>不想吃的餐品</span><span class="h2-r">直接从方案里排除</span></div>
+      <div id="avoidGroups"></div>
+    </section>
+
+    <section class="card">
+      <div class="h2"><span>优惠券偏好</span><span class="h2-r">影响凑单方式</span></div>
+      <div class="seg" id="segCoupon">
+        <button data-v="prefer">优先用券</button>
+        <button data-v="normal">顺其自然</button>
+        <button data-v="none">不用券</button>
+      </div>
+      <div class="seg-desc" id="couponDesc"></div>
+    </section>
+
+    <section class="card">
+      <div class="h2"><span>营养参考</span><span class="h2-r">决定打分权重</span></div>
+      <div class="seg" id="segNutr">
+        <button data-v="any">不限</button>
+        <button data-v="low">低卡</button>
+        <button data-v="protein">高蛋白</button>
+        <button data-v="balanced">均衡</button>
+      </div>
+      <div class="seg-desc" id="nutrDesc"></div>
+    </section>
+  </main>
+
+  <!-- ================= 结果 ================= -->
+  <main id="screenResult" class="screen hide">
+    <div class="res-head">
+      <button class="icon-btn" id="resultBack" aria-label="返回">←</button>
+      <div><h2>三组方案</h2><p id="resSub">—</p></div>
+    </div>
+    <div class="res-sum" id="resSum"></div>
+    <div class="audit-bar hide" id="auditBar"><span class="dot"></span><span id="auditText"></span></div>
+    <div id="resBody"></div>
+    <details class="algo card">
+      <summary>三组方案是怎么算出来的</summary>
+      <div class="algo-body" id="algoBody"></div>
+    </details>
+  </main>
+</div>
+
+<!-- 底部操作条：设置页 -->
+<div class="bottombar hide" id="barSetup">
+  <div class="bb-inner">
+    <button class="btn-primary" id="btnCalc">开始计算</button>
+  </div>
+</div>
+
+<!-- 底部操作条：结果页 -->
+<div class="bottombar hide" id="barResult">
+  <div class="bb-inner">
+    <div class="bb-row">
+      <button class="btn-ghost" id="btnRecalc">重新计算</button>
+      <button class="btn-ghost" id="btnShuffle">换一组方案</button>
+      <button class="btn-ghost" id="btnSave">保存方案</button>
+    </div>
+    <button class="btn-primary" id="btnGo">前往麦当劳官方 App 点餐</button>
+  </div>
+</div>
+
+<!-- 选择城市 -->
+<div class="sheet" id="citySheet">
+  <div class="sheet-bg" data-close="1"></div>
+  <div class="sheet-panel">
+    <div class="grab"></div>
+    <button class="sheet-x" data-close="1">✕</button>
+    <h2>选择城市</h2>
+    <p class="sheet-sub">覆盖内地 31 个省级行政区、<span id="cityTotal">340</span> 个城市。换城市后，餐品、价格档和停售会按当地门店重新算。</p>
+    <div class="field" style="margin-top:12px">
+      <div class="input-row">
+        <input class="input" id="citySearch" type="search" placeholder="搜城市或省份，如 合肥 / 江苏 / 拉萨" autocomplete="off" spellcheck="false"/>
+      </div>
+    </div>
+    <div class="city-hot" id="cityHot"></div>
+    <div class="city-list" id="cityList"></div>
+    <div class="fine">门店为示例数据；实际门店、价格与库存以麦当劳官方 App 为准。</div>
+  </div>
+</div>
+
+<!-- 搜这个城市的真实门店 -->
+<div class="sheet" id="realSheet">
+  <div class="sheet-bg" data-close="1"></div>
+  <div class="sheet-panel">
+    <div class="grab"></div>
+    <button class="sheet-x" data-close="1">✕</button>
+    <h2>搜真实门店</h2>
+    <p class="sheet-sub" id="realSub">用麦当劳官方接口查门店。选中一家后，餐品和价格会直接换成这家店的真实数据。</p>
+    <div class="field" style="margin-top:12px">
+      <div class="input-row">
+        <input class="input" id="realKw" type="search" placeholder="商圈或路名，如 人民广场" autocomplete="off" spellcheck="false"/>
+        <button class="btn-mini" id="btnRealSearch" type="button">搜索</button>
+      </div>
+    </div>
+    <div class="real-quick" id="realQuick"></div>
+    <div class="real-list" id="realList"></div>
+    <div class="fine">外送暂不支持官方门店查询；到店自取和得来速都能查。门店、价格与库存以麦当劳官方 App 为准。</div>
+  </div>
+</div>
+
+<!-- 登录 -->
+<div class="sheet" id="loginSheet">
+  <div class="sheet-bg" data-close="1"></div>
+  <div class="sheet-panel">
+    <div class="grab"></div>
+    <button class="sheet-x" data-close="1">✕</button>
+    <h2>登录后云端保存</h2>
+    <p class="sheet-sub">手机号收个验证码就能登录，也可以用微信一键登录。规则和保存过的方案会跟着账号走，换手机也能接着用。</p>
+
+    <div class="login-tabs" id="loginTabs">
+      <button type="button" class="on" data-tab="phone">手机号登录</button>
+      <button type="button" data-tab="email">邮箱登录</button>
+    </div>
+
+    <div data-pane="phone">
+      <div class="field">
+        <label>手机号</label>
+        <div class="input-row">
+          <div class="phone-wrap">
+            <span class="phone-cc">+86</span>
+            <input class="input" id="phoneInput" type="tel" inputmode="numeric" maxlength="11"
+                   placeholder="11 位手机号" autocomplete="tel-national"/>
+          </div>
+          <button class="btn-mini" id="btnSendPhone" type="button">获取验证码</button>
+        </div>
+        <div class="err" id="phoneErr"></div>
+      </div>
+    </div>
+
+    <div data-pane="email" class="hide">
+      <div class="field">
+        <label>邮箱</label>
+        <div class="input-row">
+          <input class="input" id="emailInput" type="email" inputmode="email" placeholder="you@example.com" autocomplete="email"/>
+          <button class="btn-mini" id="btnSendCode" type="button">发送验证码</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>验证码</label>
+      <div class="input-row">
+        <input class="input" id="codeInput" type="text" inputmode="numeric" maxlength="6" placeholder="6 位数字" autocomplete="one-time-code"/>
+        <button class="btn-mini" id="btnVerify" type="button">登录</button>
+      </div>
+    </div>
+
+    <div class="err" id="loginErr"></div>
+
+    <div class="or">或</div>
+    <button class="btn-wechat" id="btnWechat" type="button">
+      <svg class="wx-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M9.1 3C4.9 3 1.6 5.8 1.6 9.2c0 1.9 1 3.6 2.6 4.8l-.6 2.1 2.2-1.1c.9.3 1.9.5 2.9.5h.6c-.1-.4-.2-.9-.2-1.4 0-3 3-5.5 6.7-5.5h.5C15.7 5.2 12.7 3 9.1 3Zm-2.6 3.2c.5 0 .9.4.9.9s-.4.9-.9.9-.9-.4-.9-.9.4-.9.9-.9Zm5.2 0c.5 0 .9.4.9.9s-.4.9-.9.9-.9-.4-.9-.9.4-.9.9-.9Z"/><path fill="#fff" d="M22.4 14.1c0-2.8-2.7-5.1-6.1-5.1s-6.1 2.3-6.1 5.1 2.7 5.1 6.1 5.1c.8 0 1.6-.1 2.3-.4l1.9.9-.5-1.7c1.5-1 2.4-2.4 2.4-3.9Zm-8.1-1.6c.4 0 .8.3.8.8s-.4.8-.8.8-.8-.3-.8-.8.4-.8.8-.8Zm4 0c.4 0 .8.3.8.8s-.4.8-.8.8-.8-.3-.8-.8.4-.8.8-.8Z"/></svg>
+      微信一键登录
+    </button>
+    <div class="login-hint" id="wechatHint"></div>
+
+    <div class="fine">不登录也能正常用，只是规则和方案只存在这台设备上。手机号仅用于登录识别，不发营销短信。</div>
+  </div>
+</div>
+
+<!-- 历史方案 -->
+<div class="sheet" id="histSheet">
+  <div class="sheet-bg" data-close="1"></div>
+  <div class="sheet-panel">
+    <div class="grab"></div>
+    <button class="sheet-x" data-close="1">✕</button>
+    <h2>我的方案</h2>
+    <p class="sheet-sub" id="histSub">已保存的方案会出现在这里</p>
+    <div id="histBody"></div>
+  </div>
+</div>
+
+<!-- 去下单 -->
+<div class="sheet" id="goSheet">
+  <div class="sheet-bg" data-close="1"></div>
+  <div class="sheet-panel">
+    <div class="grab"></div>
+    <button class="sheet-x" data-close="1">✕</button>
+    <div id="goBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ 核心算法（纯逻辑） ============ -->
+<script id="core">
+const CATS = [
+  {key:'main', name:'主食'},
+  {key:'side', name:'小食'},
+  {key:'drink', name:'饮品'},
+  {key:'dessert', name:'甜品'}
+];
+
+const MENU = [
+  {id:'bigmac',   name:'巨无霸',            cat:'main', price:25.5, kcal:550, p:26, f:32, c:45, na:950, sat:5},
+  {id:'grilled',  name:'板烧鸡腿堡',         cat:'main', price:24.5, kcal:470, p:25, f:20, c:46, na:780, sat:4},
+  {id:'baconbeef',name:'培根蔬萃双层牛堡',   cat:'main', price:27.0, kcal:480, p:27, f:22, c:42, na:880, sat:4},
+  {id:'spicy',    name:'麦辣鸡腿堡',         cat:'main', price:21.5, kcal:520, p:24, f:26, c:46, na:900, sat:4},
+  {id:'doublech', name:'双层吉士汉堡',       cat:'main', price:19.5, kcal:450, p:24, f:23, c:34, na:850, sat:4},
+  {id:'mcchicken',name:'麦香鸡',            cat:'main', price:16.5, kcal:400, p:19, f:20, c:40, na:700, sat:3},
+  {id:'mcfillet', name:'麦香鱼',            cat:'main', price:16.5, kcal:340, p:14, f:15, c:38, na:580, sat:3},
+  {id:'cheese',   name:'吉士汉堡',           cat:'main', price:13.5, kcal:310, p:15, f:14, c:31, na:620, sat:3},
+
+  {id:'nug10',    name:'麦乐鸡 10 块',        cat:'side', price:27.0, kcal:420, p:28, f:24, c:22, na:920, sat:5},
+  {id:'friesL',   name:'大薯条',            cat:'side', price:15.0, kcal:460, p:5,  f:22, c:60, na:330, sat:4},
+  {id:'nug5',     name:'麦乐鸡 5 块',         cat:'side', price:14.5, kcal:210, p:14, f:12, c:11, na:460, sat:4, pair:1},
+  {id:'wings',    name:'麦辣鸡翅 2 块',       cat:'side', price:13.5, kcal:210, p:12, f:14, c:8,  na:520, sat:4},
+  {id:'friesM',   name:'中薯条',            cat:'side', price:12.5, kcal:340, p:4,  f:16, c:44, na:250, sat:4, pair:1},
+  {id:'salad',    name:'蔬菜沙拉（无酱）',    cat:'side', price:11.0, kcal:45,  p:2,  f:1,  c:8,  na:60,  sat:1},
+  {id:'corn',     name:'玉米杯',            cat:'side', price:9.5,  kcal:130, p:4,  f:2,  c:27, na:90,  sat:2, pair:1},
+  {id:'apple',    name:'苹果片',            cat:'side', price:8.0,  kcal:35,  p:0,  f:0,  c:9,  na:0,   sat:1, pair:1},
+
+  {id:'latte',    name:'拿铁',              cat:'drink', price:18.0, kcal:120, p:6, f:6,  c:10, na:90,  sat:3},
+  {id:'oj',       name:'橙汁',              cat:'drink', price:13.0, kcal:150, p:2, f:0,  c:35, na:10,  sat:2},
+  {id:'tea',      name:'柠檬茶',            cat:'drink', price:13.0, kcal:140, p:0, f:0,  c:35, na:15,  sat:3, pair:1},
+  {id:'coffee',   name:'鲜煮咖啡',           cat:'drink', price:12.0, kcal:5,   p:0, f:0,  c:0,  na:5,   sat:2, pair:1},
+  {id:'coke',     name:'可口可乐（中）',      cat:'drink', price:9.5,  kcal:200, p:0, f:0,  c:52, na:30,  sat:3, pair:1},
+  {id:'cokezero', name:'零度可乐（中）',      cat:'drink', price:9.5,  kcal:0,   p:0, f:0,  c:0,  na:40,  sat:2, pair:1},
+  {id:'sprite',   name:'雪碧（中）',         cat:'drink', price:9.5,  kcal:190, p:0, f:0,  c:48, na:60,  sat:3, pair:1},
+  {id:'milk',     name:'纯牛奶',            cat:'drink', price:8.0,  kcal:130, p:7, f:7,  c:10, na:100, sat:2, pair:1},
+  {id:'water',    name:'矿泉水',            cat:'drink', price:6.0,  kcal:0,   p:0, f:0,  c:0,  na:0,   sat:1, pair:1},
+
+  {id:'mcflurry', name:'麦旋风（奥利奥）',    cat:'dessert', price:14.0, kcal:320, p:6, f:12, c:45, na:180, sat:4},
+  {id:'sundae',   name:'新地',              cat:'dessert', price:12.0, kcal:280, p:5, f:9,  c:42, na:120, sat:3, pair:1},
+  {id:'pieA',     name:'苹果派',            cat:'dessert', price:9.0,  kcal:240, p:2, f:12, c:32, na:150, sat:3, pair:1},
+  {id:'pieT',     name:'香芋派',            cat:'dessert', price:9.0,  kcal:250, p:2, f:12, c:33, na:140, sat:3, pair:1},
+  {id:'cone',     name:'圆筒冰淇淋',         cat:'dessert', price:6.0,  kcal:150, p:4, f:5,  c:22, na:60,  sat:3, pair:1}
+];
+
+/* ============ 全国城市（内地 31 个省级行政区） ============
+   门店、距离、停售、差价都是示例数据，用来演示「换城市后价格与在售会变」；
+   真实可售、价格与优惠以麦当劳官方 App 按门店返回为准。 */
+const CHINA_CITIES = [
+  ['北京',   '北京'],
+  ['天津',   '天津'],
+  ['河北',   '石家庄 唐山 秦皇岛 邯郸 邢台 保定 张家口 承德 沧州 廊坊 衡水'],
+  ['山西',   '太原 大同 阳泉 长治 晋城 朔州 晋中 运城 忻州 临汾 吕梁'],
+  ['内蒙古', '呼和浩特 包头 乌海 赤峰 通辽 鄂尔多斯 呼伦贝尔 巴彦淖尔 乌兰察布'],
+  ['辽宁',   '沈阳 大连 鞍山 抚顺 本溪 丹东 锦州 营口 阜新 辽阳 盘锦 铁岭 朝阳 葫芦岛'],
+  ['吉林',   '长春 吉林 四平 辽源 通化 白山 松原 白城 延吉'],
+  ['黑龙江', '哈尔滨 齐齐哈尔 鸡西 鹤岗 双鸭山 大庆 伊春 佳木斯 七台河 牡丹江 黑河 绥化'],
+  ['上海',   '上海'],
+  ['江苏',   '南京 无锡 徐州 常州 苏州 南通 连云港 淮安 盐城 扬州 镇江 泰州 宿迁'],
+  ['浙江',   '杭州 宁波 温州 嘉兴 湖州 绍兴 金华 衢州 舟山 台州 丽水'],
+  ['安徽',   '合肥 芜湖 蚌埠 淮南 马鞍山 淮北 铜陵 安庆 黄山 滁州 阜阳 宿州 六安 亳州 池州 宣城'],
+  ['福建',   '福州 厦门 莆田 三明 泉州 漳州 南平 龙岩 宁德'],
+  ['江西',   '南昌 景德镇 萍乡 九江 新余 鹰潭 赣州 吉安 宜春 抚州 上饶'],
+  ['山东',   '济南 青岛 淄博 枣庄 东营 烟台 潍坊 济宁 泰安 威海 日照 临沂 德州 聊城 滨州 菏泽'],
+  ['河南',   '郑州 开封 洛阳 平顶山 安阳 鹤壁 新乡 焦作 濮阳 许昌 漯河 三门峡 南阳 商丘 信阳 周口 驻马店'],
+  ['湖北',   '武汉 黄石 十堰 宜昌 襄阳 鄂州 荆门 孝感 荆州 黄冈 咸宁 随州 恩施'],
+  ['湖南',   '长沙 株洲 湘潭 衡阳 邵阳 岳阳 常德 张家界 益阳 郴州 永州 怀化 娄底 吉首'],
+  ['广东',   '广州 深圳 珠海 汕头 佛山 韶关 湛江 肇庆 江门 茂名 惠州 梅州 汕尾 河源 阳江 清远 东莞 中山 潮州 揭阳 云浮'],
+  ['广西',   '南宁 柳州 桂林 梧州 北海 防城港 钦州 贵港 玉林 百色 贺州 河池 来宾 崇左'],
+  ['海南',   '海口 三亚 儋州'],
+  ['重庆',   '重庆'],
+  ['四川',   '成都 自贡 攀枝花 泸州 德阳 绵阳 广元 遂宁 内江 乐山 南充 眉山 宜宾 广安 达州 雅安 巴中 资阳 西昌'],
+  ['贵州',   '贵阳 六盘水 遵义 安顺 毕节 铜仁 凯里 都匀 兴义'],
+  ['云南',   '昆明 曲靖 玉溪 保山 昭通 丽江 普洱 临沧 大理 楚雄 蒙自 文山 景洪 芒市'],
+  ['西藏',   '拉萨 日喀则 昌都 林芝 山南 那曲'],
+  ['陕西',   '西安 铜川 宝鸡 咸阳 渭南 延安 汉中 榆林 安康 商洛'],
+  ['甘肃',   '兰州 嘉峪关 金昌 白银 天水 武威 张掖 平凉 酒泉 庆阳 定西 陇南 临夏 合作'],
+  ['青海',   '西宁 海东'],
+  ['宁夏',   '银川 石嘴山 吴忠 固原 中卫'],
+  ['新疆',   '乌鲁木齐 克拉玛依 吐鲁番 哈密 昌吉 库尔勒 阿克苏 喀什 和田 伊宁 塔城 阿勒泰 石河子']
+];
+
+/* 价格档：一线贵一点，新一线略高，其它按基准；旅游/边远城市再上浮半档 */
+const CITY_TIER = {
+  '北京':1.5, '上海':1.5, '深圳':1, '广州':1,
+  '杭州':1, '南京':1, '苏州':1,
+  '成都':.5, '重庆':.5, '武汉':.5, '西安':.5, '天津':.5, '长沙':.5, '郑州':.5,
+  '青岛':.5, '宁波':.5, '东莞':.5, '佛山':.5, '合肥':.5, '昆明':.5, '沈阳':.5,
+  '大连':.5, '厦门':.5, '福州':.5, '济南':.5, '无锡':.5, '南昌':.5, '贵阳':.5,
+  '太原':.5, '石家庄':.5, '哈尔滨':.5, '长春':.5, '南宁':.5,
+  '拉萨':.5, '三亚':.5, '喀什':.5, '和田':.5, '阿勒泰':.5, '呼伦贝尔':.5, '景洪':.5, '乌鲁木齐':.5
+};
+
+const STORE_SPOTS = ['市中心店','人民路店','火车站店','步行街店','万达广场店','大学城店',
+  '高铁站店','购物中心店','老城区店','新区广场店','汽车站店','体育中心店'];
+const SOLD_POOL = ['mcflurry','pieT','salad','nug10','latte','oj','apple','corn','milk',
+  'sundae','cokezero','wings','pieA','nug5','tea'];
+const CITY_HOT = ['上海','北京','广州','深圳','杭州','成都','合肥','南京','武汉','西安','重庆','天津'];
+
+/* 三个有具体门店数据的城市（其余城市按规则生成示例门店，保证城市可切换） */
+const CURATED_CITIES = {
+  '上海': {key:'shanghai', stores:[
+    {id:'rmgc', name:'麦当劳（人民广场店）',    dist:320,   wait:12, delta:0,    soldout:[]},
+    {id:'njd',  name:'麦当劳（南京东路店）',    dist:680,   wait:18, delta:0.5,  soldout:['mcflurry','pieT']},
+    {id:'ljz',  name:'麦当劳（陆家嘴环路店）',  dist:1200,  wait:15, delta:1,    soldout:['salad']},
+    {id:'hqtd', name:'麦当劳（虹桥天地店）',    dist:2400,  wait:22, delta:0,    soldout:['nug10','latte']},
+    {id:'wjc',  name:'麦当劳（五角场店）',      dist:3100,  wait:25, delta:-0.5, soldout:['oj','apple']},
+    {id:'dsn',  name:'麦当劳（迪士尼小镇店）',  dist:15800, wait:35, delta:1.5,  soldout:['salad','corn','milk']}
+  ]},
+  '合肥': {key:'hefei', stores:[
+    {id:'hfwx', name:'麦当劳（合肥万象城店）',  dist:520,   wait:14, delta:-0.5, soldout:[]},
+    {id:'hfzx', name:'麦当劳（合肥之心城店）',  dist:1800,  wait:19, delta:0,    soldout:['pieT','mcflurry']},
+    {id:'hfth', name:'麦当劳（天鹅湖万达店）',  dist:3500,  wait:16, delta:-1,   soldout:[]},
+    {id:'hfkd', name:'麦当劳（中科大店）',      dist:2700,  wait:24, delta:-0.5, soldout:['nug10']},
+    {id:'hfnz', name:'麦当劳（合肥南站店）',    dist:6400,  wait:21, delta:0.5,  soldout:['salad','apple','corn']}
+  ]},
+  '北京': {key:'beijing', stores:[
+    {id:'bjwfc', name:'麦当劳（王府井店）',     dist:900,   wait:20, delta:1,    soldout:['salad','pieT']},
+    {id:'bjgm',  name:'麦当劳（国贸店）',       dist:2100,  wait:17, delta:0.5,  soldout:[]},
+    {id:'bjng',  name:'麦当劳（南锣鼓巷店）',   dist:3300,  wait:26, delta:1.5,  soldout:['nug10','mcflurry','corn']}
+  ]}
+};
+
+function hashStr(s){
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+
+/* 按城市名生成稳定不变的示例门店：同一个城市每次刷新都是同样的门店与停售 */
+function makeDemoStores(cityName, provName, cityKey){
+  let seed = hashStr(provName + '|' + cityName) || 7;
+  const rnd = () => { seed = (Math.imul(seed, 1103515245) + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+  const base = CITY_TIER[cityName] === undefined ? 0 : CITY_TIER[cityName];
+  const jitter = [-0.5, 0, 0, 0.5];
+  const count = 3 + (hashStr(cityName) % 2);
+  const pool = STORE_SPOTS.slice();
+  const spots = [];
+  while (spots.length < count && pool.length){
+    spots.push(pool.splice(Math.floor(rnd() * pool.length), 1)[0]);
+  }
+  return spots.map((spot, i) => {
+    const soldout = [];
+    const nSold = Math.floor(rnd() * 3);
+    for (let k = 0; k < nSold; k++){
+      const id = SOLD_POOL[Math.floor(rnd() * SOLD_POOL.length)];
+      if (soldout.indexOf(id) < 0) soldout.push(id);
+    }
+    return {
+      id: cityKey + '-' + i,
+      name: '麦当劳（' + cityName + spot + '）',
+      dist: 320 + Math.floor(rnd() * 4200),
+      wait: 12 + Math.floor(rnd() * 15),
+      delta: Math.round((base + jitter[Math.floor(rnd() * 4)]) * 10) / 10,
+      soldout: soldout
+    };
+  });
+}
+
+const CITIES = [];
+CHINA_CITIES.forEach(row => {
+  const prov = row[0];
+  row[1].split(/\s+/).filter(Boolean).forEach(name => {
+    const cur = CURATED_CITIES[name];
+    const key = cur ? cur.key : 'c' + (CITIES.length + 1);
+    CITIES.push({
+      key: key,
+      name: name,
+      short: name,
+      prov: prov,
+      stores: cur ? cur.stores : makeDemoStores(name, prov, key)
+    });
+  });
+});
+CITIES.forEach(c => c.stores.forEach(s => { s.city = c.key; }));
+const CITY_BY_KEY = {};
+const CITY_BY_NAME = {};
+CITIES.forEach(c => { CITY_BY_KEY[c.key] = c; if (!CITY_BY_NAME[c.name]) CITY_BY_NAME[c.name] = c; });
+const STORES = CITIES.reduce((acc, c) => acc.concat(c.stores), []);
+const findStore = id => STORES.find(s => s.id === id) || STORES[0];
+const cityOf = key => CITY_BY_KEY[key] || CITIES[0];
+const cityOfStore = id => cityOf(findStore(id).city);
+
+/* 门店简称：去掉「麦当劳（）」和重复的城市名前缀，避免「拉萨 · 拉萨步行街店」 */
+function storeShortName(st){
+  if (!st) return '';
+  const city = cityOfStore(st.id);
+  let s = String(st.name || '').replace('麦当劳', '').replace(/[（）]/g, '');
+  if (city && city.name && s.indexOf(city.name) === 0) s = s.slice(city.name.length);
+  return s;
+}
+
+const PICKUPS = {
+  pickup:   {name:'到店自取', desc:'手机下单后到柜台或取餐柜自取，不加配送费'},
+  delivery: {name:'外送',     desc:'配送费 ¥6，单笔满 ¥39 免配送费（按券后金额算）'},
+  drivethru:{name:'得来速',   desc:'开车到车道取餐，不加配送费，出餐稍慢'}
+};
+
+const COUPONS = [
+  {id:'pair11', name:'随心配 1+1',        desc:'指定小食/饮品/甜品任选 2 件 13.9 元', type:'pair', price:13.9},
+  {id:'combo6', name:'组合券立减 6',      desc:'主食 + 小食 + 饮品立减 6 元',      type:'combo', cats:['main','side','drink'], off:6},
+  {id:'m30',    name:'满 30 减 5',        desc:'订单满 30 元立减 5 元',           type:'threshold', min:30, off:5},
+  {id:'m45',    name:'满 45 减 8',        desc:'订单满 45 元立减 8 元',           type:'threshold', min:45, off:8},
+  {id:'nug10',  name:'麦乐鸡 10 块立减 5', desc:'含麦乐鸡 10 块时立减 5 元',        type:'item', item:'nug10', off:5},
+  {id:'new3',   name:'新客立减 3',        desc:'首单立减 3 元',                   type:'flat', off:3},
+  {id:'tue88',  name:'周二会员日 88 折',   desc:'每周二全场 88 折',               type:'rate', rate:0.12, onlyWeekday:2}
+];
+
+const TARGETS = {
+  any:      {kcal:720, protein:28, label:'不限',   desc:'不设营养目标，只看吃得爽不爽、划不划算'},
+  low:      {kcal:520, protein:26, label:'低卡',   desc:'目标 520 千卡左右，尽量控制在 600 千卡内'},
+  protein:  {kcal:820, protein:42, label:'高蛋白', desc:'目标蛋白质 ≥ 42g，优先鸡牛鱼与牛奶'},
+  balanced: {kcal:700, protein:30, label:'均衡',   desc:'热量与蛋白质兼顾，目标 700 千卡 / 30g 蛋白'}
+};
+
+const DAILY = {kcal:2000, protein:60, fat:65, na:2000};
+const DELIVERY_FEE = 6;
+const FREE_DELIVERY_LINE = 39;
+
+/* 营养参考同时也是硬条件：达不到就算「无解」，不硬凑方案给用户。
+   允许的浮动区间写在这里，诊断里会用它算「差多少」。 */
+const NUTRITION_RULES = {
+  any:      {pass: () => true},
+  low:      {pass: ev => ev.kcal <= 600},
+  protein:  {pass: ev => ev.protein >= TARGETS.protein.protein},
+  balanced: {pass: ev => ev.kcal >= 450 && ev.kcal <= 900}
+};
+/* 放宽顺序：先试最接近的档，再退到「不限」 */
+const NUTRITION_RELAX = {protein:['balanced','any'], low:['any'], balanced:['any'], any:[]};
+
+const round2 = n => Math.round(n * 100) / 100;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const yuan = n => '¥' + (Math.round(n * 100) / 100).toFixed(2);
+const pretty = n => {
+  const v = Math.round(n * 100) / 100;
+  if (Number.isInteger(v)) return '¥' + v;
+  return '¥' + (Math.round(v * 10) / 10 === v ? v.toFixed(1) : v.toFixed(2));
+};
+
+function itemPrice(item, store){ return round2(item.price + (store ? store.delta : 0)); }
+
+/* 取餐方式限制：外送不送易融化/易出水的，得来速不卖现打冰淇淋。
+   官方餐品按渠道查询返回，这里按名称兜底再筛一次，避免切了取餐方式还用旧清单。 */
+const CHANNEL_RESTRICT = {
+  pickup:    {test: null,                         label: ''},
+  delivery:  {test: /(冰淇淋|麦旋风|新地|圆筒|沙拉)/, label: '外送不售（易融化或不便配送）'},
+  drivethru: {test: /(冰淇淋|麦旋风|新地|圆筒)/,     label: '得来速不售（现打冰淇淋）'}
+};
+
+function channelBlocked(item, pickup){
+  const rule = CHANNEL_RESTRICT[pickup];
+  if (!rule || !rule.test) return false;
+  return rule.test.test(String(item.name || ''));
+}
+
+/* 返回门店可售清单 + 筛选统计，供设置页和算法共用 */
+function menuReport(storeId, pickup){
+  const st = findStore(storeId);
+  const mode = pickup || 'pickup';
+
+  if (typeof OFFICIAL_MENU !== 'undefined' && OFFICIAL_MENU && OFFICIAL_MENU.length){
+    const all = OFFICIAL_MENU.map(i => Object.assign({}, i));
+    const items = all.filter(i => !channelBlocked(i, mode));
+    return {
+      store: st,
+      items: items,
+      total: all.length,
+      soldout: [],
+      channel: all.filter(i => channelBlocked(i, mode)).map(i => i.name),
+      official: true
+    };
+  }
+
+  const inStore = MENU.filter(i => !st.soldout.includes(i.id));
+  const items = inStore.filter(i => !channelBlocked(i, mode))
+                       .map(i => Object.assign({}, i, {price: itemPrice(i, st)}));
+  return {
+    store: st,
+    items: items,
+    total: MENU.length,
+    soldout: MENU.filter(i => st.soldout.includes(i.id)).map(i => i.name),
+    channel: inStore.filter(i => channelBlocked(i, mode)).map(i => i.name),
+    official: false
+  };
+}
+
+function storeMenu(storeId, pickup){
+  return menuReport(storeId, pickup).items;
+}
+
+function availableCoupons(now){
+  const wd = (now || new Date()).getDay();
+  return COUPONS.filter(c => c.onlyWeekday === undefined || c.onlyWeekday === wd);
+}
+
+function couponDiscount(c, items, subtotal){
+  const sub = subtotal === undefined ? round2(items.reduce((s, i) => s + i.price, 0)) : subtotal;
+  switch (c.type){
+    case 'pair': {
+      const pool = items.filter(i => i.pair).slice().sort((a, b) => b.price - a.price);
+      if (pool.length < 2) return 0;
+      return round2(Math.max(0, round2(pool[0].price + pool[1].price) - c.price));
+    }
+    case 'combo':
+      return c.cats.every(cat => items.some(i => i.cat === cat)) ? c.off : 0;
+    case 'threshold':
+      return sub >= c.min ? c.off : 0;
+    case 'item':
+      return items.some(i => i.id === c.item) ? c.off : 0;
+    case 'flat':
+      return c.off;
+    case 'rate':
+      return round2(sub * c.rate);
+  }
+  return 0;
+}
+
+/* 总价 = 餐品价；优惠 = 单张最优券；应付 = 总价 - 优惠 + 配送费 */
+function evaluate(items, coupons, pickup){
+  const list = coupons || availableCoupons();
+  const subtotal = round2(items.reduce((s, i) => s + i.price, 0));
+  let best = null, bestD = 0;
+  list.forEach(c => {
+    let d = round2(couponDiscount(c, items, subtotal));
+    if (d > subtotal) d = subtotal;
+    if (d > bestD + 1e-9){ bestD = d; best = c; }
+  });
+  const afterDiscount = round2(subtotal - bestD);
+  const deliveryFee = pickup === 'delivery' ? (afterDiscount >= FREE_DELIVERY_LINE ? 0 : DELIVERY_FEE) : 0;
+  return {
+    items: items,
+    subtotal: subtotal,
+    discount: bestD,
+    coupon: bestD > 0 ? best : null,
+    deliveryFee: deliveryFee,
+    total: round2(afterDiscount + deliveryFee),
+    kcal: items.reduce((s, i) => s + i.kcal, 0),
+    protein: items.reduce((s, i) => s + i.p, 0),
+    fat: items.reduce((s, i) => s + i.f, 0),
+    carb: items.reduce((s, i) => s + i.c, 0),
+    na: items.reduce((s, i) => s + i.na, 0),
+    sat: items.reduce((s, i) => s + i.sat, 0)
+  };
+}
+
+/* 第 1 步：按门店 + 取餐方式筛出真正能点的餐品，再排除忌口，然后穷举组合 */
+function enumeratePlans(opts){
+  const menu = storeMenu(opts.storeId, opts.pickup);
+  const blocked = new Set(opts.avoid || []);
+  const pool = menu.filter(i => !blocked.has(i.id));
+  const want = opts.want || [];
+  const forced = pool.filter(i => want.includes(i.id));
+  const forcedIds = new Set(forced.map(i => i.id));
+  const cnt = cat => forced.filter(i => i.cat === cat).length;
+
+  const rest = pool.filter(i => !forcedIds.has(i.id));
+  const mainOpts  = cnt('main')    > 0 ? [null] : rest.filter(i => i.cat === 'main');
+  const sideOpts  = cnt('side')    > 0 ? [null] : [null].concat(rest.filter(i => i.cat === 'side'));
+  const drinkOpts = cnt('drink')   > 0 ? [null] : [null].concat(rest.filter(i => i.cat === 'drink'));
+  const desOpts   = cnt('dessert') > 0 ? [null] : [null].concat(rest.filter(i => i.cat === 'dessert'));
+
+  const out = [], seen = new Set();
+  for (const m of mainOpts)
+    for (const s of sideOpts)
+      for (const d of drinkOpts)
+        for (const ds of desOpts){
+          const items = forced.concat([m, s, d, ds].filter(Boolean));
+          if (items.length < 2 || items.length > 4) continue;
+          if (!items.some(i => i.cat === 'main')) continue;
+          const sig = items.map(i => i.id).sort().join('|');
+          if (seen.has(sig)) continue;
+          seen.add(sig);
+          out.push(items);
+        }
+  return out;
+}
+
+const GROUPS = [
+  {key:'budget',    name:'预算优先',     tag:'预算', tone:'#0F7B52', soft:'#E8F6F0',
+   w:{fit:.18, value:.48, disc:.24, sat:.10}, sort:'price', gate:.55},
+  {key:'nutrition', name:'营养参考优先', tag:'营养', tone:'#1A56DB', soft:'#EAF0FF',
+   w:{fit:.60, value:.16, disc:.12, sat:.12}, sort:'fit', gate:.50},
+  {key:'taste',     name:'口味优先',     tag:'口味', tone:'#6D28D9', soft:'#F2ECFF',
+   w:{fit:.14, value:.14, disc:.12, sat:.60}, sort:'sat', gate:.50}
+];
+
+function scorePlan(ev, weights, nutrKey, budget, couponFirst){
+  const t = TARGETS[nutrKey] || TARGETS.any;
+  const kcalFit = clamp(1 - Math.abs(ev.kcal - t.kcal) / (t.kcal * 0.62), 0, 1);
+  const proFit  = clamp(ev.protein / t.protein, 0, 1);
+  const fit = 0.6 * kcalFit + 0.4 * proFit;
+  const value = clamp((ev.kcal / Math.max(ev.total, 1)) / 32, 0, 1);
+  const disc  = ev.subtotal > 0 ? clamp((ev.discount / ev.subtotal) / 0.36, 0, 1) : 0;
+  const sat   = clamp((ev.sat - 3) / 7, 0, 1);
+  const complete = (ev.items.some(i => i.cat === 'side') ? .5 : 0) + (ev.items.some(i => i.cat === 'drink') ? .5 : 0);
+  const w = {
+    fit: weights.fit * (nutrKey === 'any' ? 1 : 1.15),
+    value: weights.value,
+    disc: weights.disc * (couponFirst ? 1 : 0.2),
+    sat: weights.sat
+  };
+  let score = w.fit * fit + w.value * value + w.disc * disc + w.sat * sat + complete * 0.03;
+  const over = ev.total - budget;
+  if (over > 0) score -= 0.4 + (over / Math.max(budget, 1)) * 1.1;
+  return {score: score, fit: fit, value: value, disc: disc, sat: sat, over: over > 0};
+}
+
+const mainIdOf = ev => { const m = ev.items.find(i => i.cat === 'main'); return m ? m.id : ''; };
+const extrasOf = (ev, forced) => ev.items.filter(i => i.cat !== 'main' && !forced.has(i.id)).map(i => i.id);
+
+function tooSimilar(a, b, forced){
+  const ea = extrasOf(a, forced), eb = extrasOf(b, forced);
+  const ma = mainIdOf(a), mb = mainIdOf(b);
+  if (ma === mb && !forced.has(ma)){
+    if (!ea.length || !eb.length) return true;
+    // 三件以上同主餐只换配餐，区别太小；两件式允许换掉那唯一一件配餐
+    if (ea.length >= 2 && eb.length >= 2) return true;
+    return ea.some(x => eb.indexOf(x) >= 0);
+  }
+  if (!ea.length || !eb.length) return ea.length === eb.length;
+  const shared = eb.filter(x => ea.indexOf(x) >= 0).length;
+  return shared >= Math.min(ea.length, eb.length);
+}
+
+/* 把当前条件跑一遍，逐层统计还剩多少，供「有没有解」和诊断共用 */
+function scanPlans(opts){
+  const report = menuReport(opts.storeId, opts.pickup);
+  const avail = new Set(report.items.map(i => i.id));
+  const wantBlocked = (opts.want || []).filter(id => !avail.has(id));
+  const couponList = opts.couponPref === 'none' ? [] : availableCoupons();
+  const combos = enumeratePlans(opts).map(items => ({
+    items: items,
+    ev: evaluate(items, couponList, opts.pickup),
+    sig: items.map(i => i.id).sort().join('|')
+  }));
+  const rule = NUTRITION_RULES[opts.nutrition] || NUTRITION_RULES.any;
+  const inBudget = combos.filter(p => p.ev.total <= opts.budget + 1e-6);
+  const passBudget = inBudget.filter(p => rule.pass(p.ev));
+  const passAny = combos.filter(p => rule.pass(p.ev));
+  // 必吃项在当前门店/取餐方式下点不到，就不存在「满足条件」的方案
+  const pass = wantBlocked.length ? [] : passBudget;
+  const minOf = (arr, f) => arr.length ? arr.reduce((m, p) => Math.min(m, f(p)), Infinity) : 0;
+  const maxOf = (arr, f) => arr.length ? arr.reduce((m, p) => Math.max(m, f(p)), -Infinity) : 0;
+  return {
+    report: report,
+    combos: combos,
+    inBudget: inBudget,
+    passBudget: passBudget,
+    pass: pass,
+    passAny: passAny,
+    wantBlocked: wantBlocked,
+    couponList: couponList,
+    rule: rule,
+    cheapest: minOf(combos, p => p.ev.total),
+    cheapestPass: minOf(passAny, p => p.ev.total),
+    proteinMaxInBudget: maxOf(inBudget, p => p.ev.protein),
+    kcalMinInBudget: minOf(inBudget, p => p.ev.kcal),
+    kcalMaxInBudget: maxOf(inBudget, p => p.ev.kcal),
+    feasible: pass.length > 0
+  };
+}
+
+/* 每组给一叠候选（最多 5 个），「换一组方案」就是每叠往后翻一张。
+   候选池只收「预算内 + 达到营养参考 + 必吃都能点到」的组合；
+   一个都不剩就返回无解，绝不拿超预算或不合营养的搭配充数。 */
+function buildDecks(opts){
+  const scan = scanPlans(opts);
+  const pool = scan.pass;
+  const forced = new Set(opts.want || []);
+  const decks = {};
+  const usedHeads = new Set();
+  GROUPS.forEach(g => {
+    if (!pool.length){ decks[g.key] = []; return; }
+    const scored = pool.map(p => ({
+      ev: p.ev, sig: p.sig,
+      s: scorePlan(p.ev, g.w, opts.nutrition, opts.budget, opts.couponPref === 'prefer')
+    }));
+    let max = -Infinity, min = Infinity;
+    scored.forEach(x => {
+      if (x.s.score > max) max = x.s.score;
+      if (x.s.score < min) min = x.s.score;
+    });
+    // 按分数分布取相对门槛，避免分数整体偏低时只剩一个候选
+    const spread = Math.max(1e-6, max - min);
+    const gate = max - spread * (1 - g.gate);
+    let list = scored.filter(x => x.s.score >= gate);
+    if (!list.length) list = scored.slice();
+
+    if (g.sort === 'price') list.sort((a, b) => a.ev.total - b.ev.total || b.s.score - a.s.score);
+    else if (g.sort === 'fit') list.sort((a, b) => b.s.fit - a.s.fit || b.s.score - a.s.score);
+    else list.sort((a, b) => b.ev.sat - a.ev.sat || a.ev.total - b.ev.total);
+
+    const deck = [];
+    const fill = arr => {
+      for (const c of arr){
+        if (deck.length >= 5) break;
+        if (deck.some(d => d.sig === c.sig)) continue;
+        if (deck.some(d => tooSimilar(d.ev, c.ev, forced))) continue;
+        deck.push(c);
+      }
+    };
+    fill(list);
+    // 首选已经被别的组占了，就用全量候选补一叠，避免两组给出一模一样的方案
+    if (deck.length && usedHeads.has(deck[0].sig)) fill(scored);
+    // 三组的首选不能撞车，撞了就在这一叠里转一位
+    const at = deck.findIndex(d => !usedHeads.has(d.sig));
+    if (at > 0){
+      const rotated = deck.slice(at).concat(deck.slice(0, at));
+      deck.length = 0;
+      Array.prototype.push.apply(deck, rotated);
+    }
+    if (deck.length) usedHeads.add(deck[0].sig);
+    decks[g.key] = deck;
+  });
+  return {
+    decks: decks,
+    feasible: pool.length > 0,
+    scan: scan,
+    totalPlans: scan.combos.length,
+    inBudget: scan.inBudget.length,
+    poolSize: pool.length,
+    couponList: scan.couponList,
+    menu: scan.report
+  };
+}
+
+/* ---------- 无解诊断 ---------- */
+function itemById(id){
+  const hit = MENU.find(i => i.id === id);
+  if (hit) return hit;
+  if (typeof OFFICIAL_MENU !== 'undefined' && OFFICIAL_MENU) return OFFICIAL_MENU.find(i => i.id === id) || null;
+  return null;
+}
+function nameOf(id){ const it = itemById(id); return it ? it.name : id; }
+
+/* 说清楚是哪个条件互相打架，每条都带具体数字 */
+function diagnose(opts, scanArg){
+  const s = scanArg || scanPlans(opts);
+  const t = TARGETS[opts.nutrition] || TARGETS.any;
+  const st = s.report.store;
+  const city = cityOfStore(st.id);
+  const conflicts = [];
+
+  s.wantBlocked.forEach(id => {
+    const it = itemById(id) || {};
+    const noChan = channelBlocked(it, opts.pickup);
+    const sameCity = STORES.filter(x => x.city === city.key && x.id !== st.id && x.soldout.indexOf(id) < 0).length;
+    conflicts.push({
+      tag: '餐品',
+      title: '「' + nameOf(id) + '」' + (noChan ? PICKUPS[opts.pickup].name + '不售' : '这家门店停售'),
+      detail: noChan
+        ? '这道餐品在' + PICKUPS[opts.pickup].name + '渠道点不到，换个取餐方式或换一道同类餐品才凑得齐。'
+        : '当前门店今天没有这道。' + (sameCity ? city.short + '还有 ' + sameCity + ' 家门店在售，换城市/门店也能解决。' : '换一道同类餐品更省事。')
+    });
+  });
+
+  const avoidSet = new Set(opts.avoid || []);
+  const availMains = s.report.items.filter(i => i.cat === 'main' && !avoidSet.has(i.id));
+  const blockedMains = s.report.items.filter(i => i.cat === 'main' && avoidSet.has(i.id));
+
+  if (!availMains.length){
+    conflicts.push({
+      tag: '餐品',
+      title: blockedMains.length ? '主餐被忌口全排掉了' : '这家店没有可售的主餐',
+      detail: blockedMains.length
+        ? '一个套餐至少要 1 道主餐，而你把 ' + blockedMains.length + ' 道主餐都勾进了「不想吃」。放开其中一道，或者换一家门店。'
+        : '当前门店和取餐方式下一道主餐都没有，换门店或换城市试试。'
+    });
+  } else if (!s.combos.length && !s.wantBlocked.length){
+    conflicts.push({
+      tag: '组合',
+      title: '按现在的必吃项凑不出套餐',
+      detail: '一个套餐是「1 道主餐 + 最多 3 件配餐」。现在勾的必吃项已经占满 4 件，去掉一件才凑得成。'
+    });
+  }
+
+  if (s.combos.length && !s.inBudget.length){
+    conflicts.push({
+      tag: '预算',
+      title: '预算 ' + pretty(opts.budget) + ' 装不下任何组合',
+      detail: '当前门店和取餐方式下，最便宜的组合也要 ' + pretty(s.cheapest)
+        + '，差 ' + yuan(s.cheapest - opts.budget) + '。'
+        + (s.cheapestPass > s.cheapest ? '而且要同时满足「' + t.label + '」，最低得 ' + pretty(s.cheapestPass) + '。' : '')
+    });
+  }
+
+  if (s.inBudget.length && !s.passBudget.length){
+    let d = '';
+    if (opts.nutrition === 'protein'){
+      d = '预算内蛋白质最高只有 ' + s.proteinMaxInBudget + 'g，离目标 ' + t.protein + 'g 还差 ' + Math.max(0, t.protein - s.proteinMaxInBudget) + 'g。';
+    } else if (opts.nutrition === 'low'){
+      d = '预算内热量最低的组合也有 ' + s.kcalMinInBudget + ' 千卡，超过低卡上限 600 千卡。';
+    } else {
+      d = '预算内热量在 ' + s.kcalMinInBudget + '–' + s.kcalMaxInBudget + ' 千卡之间，落在均衡区间 450–900 之外。';
+    }
+    if (s.cheapestPass && s.cheapestPass > opts.budget) d += ' 达标的最便宜组合要 ' + pretty(s.cheapestPass) + '。';
+    conflicts.push({
+      tag: '营养',
+      title: '「' + t.label + '」和预算互相打架',
+      detail: d
+    });
+  }
+
+  if (!conflicts.length && !s.feasible){
+    conflicts.push({
+      tag: '条件',
+      title: '这几项条件凑不到一起',
+      detail: '预算、必吃项、忌口、取餐方式和营养参考之间没有交集，按下面的建议放掉一个条件即可。'
+    });
+  }
+
+  return {scan: s, conflicts: conflicts, feasible: s.feasible, store: st, city: city};
+}
+
+/* 六个调整方向：每个都先试算「改完真的有解」才给按钮，给不出就说明原因。
+   单个条件调不开时，会连带把营养/预算微调一起算进去，改了什么写在按钮上。 */
+function fixFor(opts, patch, allowBudget){
+  const tryOne = p => {
+    const next = Object.assign({}, opts, p);
+    if (next.want) next.want = next.want.slice();
+    if (next.avoid) next.avoid = next.avoid.slice();
+    const sc = scanPlans(next);
+    return sc.feasible ? {patch: p, scan: sc, extra: []} : null;
+  };
+  let r = tryOne(patch);
+  if (r) return r;
+
+  const alts = NUTRITION_RELAX[opts.nutrition] || [];
+  for (const alt of alts){
+    r = tryOne(Object.assign({}, patch, {nutrition: alt}));
+    if (r){ r.extra = ['营养放宽到' + TARGETS[alt].label]; return r; }
+  }
+  if (!allowBudget) return null;
+
+  const p2 = Object.assign({}, patch, {nutrition: 'any'});
+  const sc0 = scanPlans(Object.assign({}, opts, p2));
+  if (!sc0.combos.length) return null;
+  const need = Math.ceil(sc0.cheapest);
+  const budget = Math.max(opts.budget, p2.budget || 0, need);
+  if (budget > 80 || budget === opts.budget) return null;
+  r = tryOne(Object.assign({}, p2, {budget: budget}));
+  if (r){ r.extra = ['营养放宽到不限', '预算提到' + pretty(budget)]; return r; }
+  return null;
+}
+
+function actionsFor(opts, diag){
+  const s = diag.scan;
+  const acts = [];
+  const want = (opts.want || []).slice();
+  const noWant = !want.length;
+  const blocked = s.wantBlocked.length > 0;
+  const avoidSet = new Set(opts.avoid || []);
+  const noMain = !s.report.items.some(i => i.cat === 'main' && !avoidSet.has(i.id));
+  const onlyChannelBlocked = blocked && s.wantBlocked.every(id => channelBlocked(itemById(id) || {}, opts.pickup));
+  const exact = patch => {
+    const sc = scanPlans(Object.assign({}, opts, patch));
+    return sc.feasible ? {patch: patch, scan: sc, extra: []} : null;
+  };
+  const extras = ex => (ex && ex.length ? '，' + ex.join('，') : '');
+  const push = (key, label, detail, patch, ok, why) =>
+    acts.push({key: key, label: label, detail: detail, patch: patch || null, ok: !!ok, why: why || ''});
+
+  /* 1 增加预算 */
+  const targets = [];
+  [Math.ceil(s.cheapestPass), Math.ceil(s.cheapest)].forEach(v => {
+    if (v > opts.budget && v <= 80 && targets.indexOf(v) < 0) targets.push(v);
+  });
+  targets.sort((a, b) => a - b);
+  let bfix = null;
+  for (const v of targets){
+    const r = fixFor(opts, {budget: v}, true);
+    if (!r) continue;
+    if (!bfix) bfix = r;
+    if (!r.extra.length){ bfix = r; break; }
+  }
+  if (bfix){
+    push('budget', '增加预算',
+      pretty(opts.budget) + ' → ' + pretty(bfix.patch.budget) + (bfix.extra.length ? extras(bfix.extra) : '，能满足全部条件'),
+      bfix.patch, true);
+  } else if (blocked){
+    push('budget', '增加预算', '这道餐品现在点不到，加预算也没用', null, false, '卡点不在预算，先把餐品问题解决');
+  } else if (noMain){
+    push('budget', '增加预算', '主餐全被排掉了，加预算也没用', null, false, '卡点不在预算，先放开一道主餐');
+  } else if (!s.combos.length){
+    push('budget', '增加预算', '现在没有可组合的套餐，加预算也没用', null, false, '卡点不在预算');
+  } else if (Math.ceil(s.cheapest) > 80){
+    push('budget', '增加预算', '至少要 ' + pretty(s.cheapest) + '，超过 ¥80 上限', null, false, '需要超过预算上限');
+  } else {
+    push('budget', '增加预算', '现在的预算已经够得着最便宜的组合，卡点不在预算', null, false, '预算不是这里的卡点');
+  }
+
+  /* 2 放宽营养参考 */
+  const alts = NUTRITION_RELAX[opts.nutrition] || [];
+  if (!alts.length){
+    push('nutrition', '放宽营养参考', '营养参考已经是不限了', null, false, '已经是最宽的营养设定');
+  } else if (blocked){
+    push('nutrition', '放宽营养参考', '这道餐品点不到，放宽营养也解决不了', null, false, '卡点不在营养，是餐品点不到');
+  } else if (noMain){
+    push('nutrition', '放宽营养参考', '主餐全被排掉了，放宽营养也没用', null, false, '卡点不在营养，先放开一道主餐');
+  } else {
+    let nfix = null;
+    for (const alt of alts){
+      const r = fixFor(opts, {nutrition: alt}, true);
+      if (!r) continue;
+      if (!nfix) nfix = r;
+      if (!r.extra.length){ nfix = r; break; }
+    }
+    if (nfix){
+      push('nutrition', '放宽营养参考',
+        TARGETS[opts.nutrition].label + ' → ' + TARGETS[nfix.patch.nutrition || 'any'].label
+          + extras((nfix.extra || []).filter(x => x.indexOf('营养放宽') !== 0)),
+        nfix.patch, true);
+    } else {
+      push('nutrition', '放宽营养参考', '放宽到「不限」也凑不出来', null, false, '放宽营养也解决不了，卡在预算或餐品上');
+    }
+  }
+
+  /* 3 替换餐品：换成同类里更便宜/更低卡的 */
+  if (noWant){
+    push('swap', '替换餐品', '没勾必吃项，没有可替换的目标', null, false, '先在设置里勾一道想吃的，才有可换的餐品');
+  } else {
+    let sfix = null;
+    for (let i = 0; i < want.length && !(sfix && !sfix.fix.extra.length); i++){
+      const id = want[i];
+      const old = itemById(id);
+      if (!old) continue;
+      const cands = s.report.items.filter(x => x.cat === old.cat && x.id !== id
+          && want.indexOf(x.id) < 0 && (opts.avoid || []).indexOf(x.id) < 0)
+        .sort((a, b) => a.price - b.price || a.kcal - b.kcal);
+      for (const c of cands.slice(0, 12)){
+        const nextWant = want.map(x => x === id ? c.id : x);
+        const r = fixFor(opts, {want: nextWant}, true);
+        if (!r) continue;
+        if (!sfix) sfix = {from: old, to: c, fix: r};
+        if (!r.extra.length){ sfix = {from: old, to: c, fix: r}; break; }
+      }
+    }
+    if (sfix){
+      push('swap', '替换餐品',
+        '把「' + sfix.from.name + '」换成「' + sfix.to.name + '」（' + pretty(sfix.to.price) + '）' + extras(sfix.fix.extra),
+        sfix.fix.patch, true);
+    } else {
+      push('swap', '替换餐品', '同类里换哪一道都凑不齐', null, false, '同类替换也解决不了，试试删掉一项');
+    }
+  }
+
+  /* 4 去掉一个餐品 */
+  let dfix = null;
+  const byPrice = want.slice().sort((a, b) => {
+    const pa = itemById(a), pb = itemById(b);
+    return (pb ? pb.price : 0) - (pa ? pa.price : 0);
+  });
+  for (let i = 0; i < byPrice.length && !(dfix && !dfix.fix.extra.length); i++){
+    const id = byPrice[i];
+    const r = fixFor(opts, {want: want.filter(x => x !== id)}, true);
+    if (!r) continue;
+    if (!dfix) dfix = {id: id, fix: r};
+    if (!r.extra.length){ dfix = {id: id, fix: r}; break; }
+  }
+  if (dfix){
+    push('drop', '去掉一个餐品', '去掉「' + nameOf(dfix.id) + '」' + extras(dfix.fix.extra), dfix.fix.patch, true);
+  } else {
+    // 没有必吃项可去时，退一步：放开一个忌口的主餐
+    let opened = null;
+    (opts.avoid || []).forEach(id => {
+      if (opened) return;
+      const it = itemById(id);
+      if (!it || it.cat !== 'main') return;
+      const r = fixFor(opts, {avoid: (opts.avoid || []).filter(x => x !== id)}, true);
+      if (r) opened = {id: id, fix: r};
+    });
+    if (opened){
+      push('drop', '去掉一个餐品', '放开忌口「' + nameOf(opened.id) + '」，把它放回候选' + extras(opened.fix.extra),
+        opened.fix.patch, true);
+    } else {
+      push('drop', '去掉一个餐品', noWant ? '没有必吃项可去掉' : '去掉任何一项都还差条件', null, false,
+        noWant ? '先在设置里勾一道想吃的，才有可删的' : '删一项也还差别的条件');
+    }
+  }
+
+  /* 5 更换取餐方式（只做这一件事，不连带改预算） */
+  let pfix = null;
+  for (const mode of ['pickup', 'drivethru', 'delivery']){
+    if (mode === opts.pickup) continue;
+    const r = exact({pickup: mode});
+    if (r){ pfix = {mode: mode, fix: r}; break; }
+  }
+  if (pfix){
+    push('pickup', '更换取餐方式', PICKUPS[opts.pickup].name + ' → ' + PICKUPS[pfix.mode].name, pfix.fix.patch, true);
+  } else {
+    push('pickup', '更换取餐方式', '另外两种取餐方式也凑不出来', null, false, '换取餐方式也解决不了');
+  }
+
+  /* 6 更换城市/门店（先同城换店，再按价格档+停售组合抽样别的城市） */
+  const curCity = cityOfStore(opts.storeId);
+  let cfix = null;
+  STORES.filter(x => x.city === curCity.key && x.id !== opts.storeId)
+    .sort((a, b) => a.dist - b.dist)
+    .forEach(st => {
+      if (cfix) return;
+      const r = exact({storeId: st.id});
+      if (r) cfix = {city: curCity, store: st, fix: r, sameCity: true};
+    });
+  if (!cfix){
+    for (const st of trialStores(curCity.key, 20)){
+      const r = exact({storeId: st.id});
+      if (r){ cfix = {city: cityOfStore(st.id), store: st, fix: r}; break; }
+    }
+  }
+  if (cfix){
+    const name = storeShortName(cfix.store);
+    const km = cfix.store.dist >= 1000 ? (cfix.store.dist / 1000).toFixed(1) + ' km' : cfix.store.dist + ' m';
+    push('city', '更换城市',
+      cfix.sameCity ? '同城换到「' + name + '」（' + km + '）' : curCity.name + ' → ' + cfix.city.name + '（' + name + '，' + km + '）',
+      cfix.fix.patch, true);
+  } else if (onlyChannelBlocked){
+    push('city', '更换城市', '这是取餐方式的限制，换城市也没用', null, false, '外送/得来速不售是渠道限制');
+  } else {
+    push('city', '更换城市', '全国 ' + CITIES.length + ' 个城市都不满足现在的条件', null, false, '换城市也解决不了，得放预算或营养');
+  }
+
+  return acts;
+}
+
+/* 全国几百个城市逐个试算太慢：先同省，再全国，按「价格档 + 停售组合」去重，
+   每种不同的门店条件只试一次，最多 limit 家。 */
+function trialStores(curCityKey, limit){
+  const cur = cityOf(curCityKey);
+  const seen = new Set(), out = [];
+  const consider = c => {
+    if (out.length >= limit) return;
+    const list = c.stores.slice().sort((a, b) => a.dist - b.dist);
+    for (const st of list){
+      if (out.length >= limit) break;
+      const sig = st.delta + '|' + st.soldout.join(',');
+      if (seen.has(sig)) continue;
+      seen.add(sig);
+      out.push(st);
+    }
+  };
+  CITIES.forEach(c => { if (c.prov === cur.prov && c.key !== cur.key) consider(c); });
+  CITIES.forEach(c => { if (c.prov !== cur.prov) consider(c); });
+  return out;
+}
+
+/* 推荐理由：只用能看到的东西说话，不做健康承诺 */
+const BANNED_CLAIMS = [
+  /保证减重/g, /保证减肥/g, /保证瘦/g, /一定(能|会)?瘦/g, /一定(能|会)?减重/g,
+  /减肥/g, /减脂/g, /燃脂/g, /治疗/g, /降(血糖|血压|血脂)/g, /无副作用/g, /健康功效/g
+];
+function plainReason(text){
+  let s = String(text == null ? '' : text);
+  BANNED_CLAIMS.forEach(re => { s = s.replace(re, '热量更低的搭配'); });
+  return s;
+}
+
+function reasonFor(ev, g, opts){
+  const t = TARGETS[opts.nutrition] || TARGETS.any;
+  const main = ev.items.filter(i => i.cat === 'main').map(i => i.name).join('、') || '主食';
+  const parts = [];
+
+  if (g.key === 'budget'){
+    parts.push(ev.discount > 0
+      ? '原价 ' + pretty(ev.subtotal) + '，用「' + ev.coupon.name + '」省 ' + yuan(ev.discount) + '，实付 ' + pretty(ev.total)
+      : '这组没用上券，实付 ' + pretty(ev.total));
+    if (ev.deliveryFee > 0) parts.push('应付里含 ' + yuan(ev.deliveryFee) + ' 配送费');
+    parts.push('主食是' + main + '，一共 ' + ev.items.length + ' 件、约 ' + ev.kcal + ' 千卡');
+    parts.push('每 10 元大约吃到 ' + Math.round(ev.kcal / Math.max(ev.total, 1) * 10) + ' 千卡');
+    if (ev.total > opts.budget) parts.push('比预算多 ' + yuan(ev.total - opts.budget));
+  } else if (g.key === 'nutrition'){
+    const kd = ev.kcal - t.kcal;
+    if (Math.abs(kd) <= 60) parts.push('热量 ' + ev.kcal + ' 千卡，和你设的 ' + t.kcal + ' 千卡很接近');
+    else parts.push('热量 ' + ev.kcal + ' 千卡，比目标' + (kd > 0 ? '高 ' : '低 ') + Math.abs(kd) + ' 千卡（你设的是 ' + t.kcal + ' 千卡）');
+    parts.push('蛋白质 ' + ev.protein + 'g，目标 ' + t.protein + 'g'
+      + (ev.protein >= t.protein ? '，已经够了' : '，还差 ' + (t.protein - ev.protein) + 'g'));
+    if (ev.protein < t.protein) parts.push('想补蛋白质可以加一份纯牛奶或麦乐鸡');
+    else if (ev.kcal > t.kcal) parts.push('想再低一点，可以把含糖饮料换成零度可乐');
+    else parts.push('主食是' + main + '，配餐挑的是热量更低的那几样');
+  } else {
+    const wants = ev.items.filter(i => (opts.want || []).indexOf(i.id) >= 0).map(i => i.name);
+    if (wants.length) parts.push('带上了你想吃的' + wants.join('、'));
+    parts.push('主食是' + main);
+    const sides = ev.items.filter(i => i.cat !== 'main').map(i => i.name);
+    if (sides.length) parts.push('配了' + sides.join('、'));
+    const kinds = [];
+    if (ev.items.some(i => i.cat === 'side')) kinds.push('小食');
+    if (ev.items.some(i => i.cat === 'drink')) kinds.push('饮品');
+    if (ev.items.some(i => i.cat === 'dessert')) kinds.push('甜品');
+    parts.push('实付 ' + pretty(ev.total) + '，'
+      + (kinds.length ? '主食之外还有' + kinds.join('、') : '只有主食，适合只想吃这一口'));
+  }
+  return plainReason(parts.join('；') + '。');
+}
+</script>
+
+<!-- ============ 云服务 + 界面 ============ -->
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => Array.prototype.slice.call(document.querySelectorAll(s));
+const LS_KEY = 'maimai.qianqiansuan.v2';
+
+/* 云同步（可选项）运行时配置：由 server.js 从环境变量注入，未配置就整站走「本机保存」 */
+const RUNTIME = (typeof window !== 'undefined' && window.__RUNTIME_CONFIG__) || {};
+const CLOUD_CONFIG = {
+  resourceId: RUNTIME.cloudResourceId || '',
+  endpoint: RUNTIME.cloudEndpoint || '',
+  oauthRelayBaseUrl: RUNTIME.cloudOauthRelayUrl || '',
+  publishableKey: RUNTIME.cloudPublishableKey || ''
+};
+
+const DEFAULT_STATE = {
+  budget: 40,
+  storeId: 'rmgc',
+  pickup: 'pickup',
+  want: ['spicy', 'friesM'],
+  avoid: [],
+  couponPref: 'prefer',
+  nutrition: 'any'
+};
+
+let state = loadLocal();
+let decks = null;
+let deckIdx = {budget:0, nutrition:0, taste:0};
+let lastOpts = null;
+let savedCount = 0;
+let cloud = null;
+let session = null;
+let pendingOtp = null;
+let pendingAction = null;
+
+/* ---------- 本地状态 ---------- */
+function loadLocal(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return Object.assign({}, DEFAULT_STATE);
+    const s = JSON.parse(raw);
+    return Object.assign({}, DEFAULT_STATE, s, {
+      want: Array.isArray(s.want) ? s.want : [],
+      avoid: Array.isArray(s.avoid) ? s.avoid : [],
+      budget: clamp(Number(s.budget) || 40, 12, 80)
+    });
+  }catch(e){ return Object.assign({}, DEFAULT_STATE); }
+}
+function saveLocal(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){} }
+
+let toastTimer = null;
+function toast(msg){
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('on'), 2000);
+}
+
+const currentStore = () => findStore(state.storeId);
+const groupByKey = key => GROUPS.find(g => g.key === key) || GROUPS[0];
+
+/* 换门店/换取餐方式后，把当前点不到的必吃项清掉 */
+function pruneWant(){
+  const ok = new Set(menuReport(state.storeId, state.pickup).items.map(i => i.id));
+  const lost = state.want.filter(id => !ok.has(id));
+  if (!lost.length) return;
+  state.want = state.want.filter(id => ok.has(id));
+  const names = lost.map(id => (MENU.find(i => i.id === id) || {}).name || id);
+  toast('「' + names.join('、') + '」当前点不到，已从必吃里移除');
+}
+
+/* ---------- 云：初始化 ---------- */
+function initCloud(){
+  /* 没配云端就纯本机模式：不弹登录，方案存 localStorage */
+  if (!CLOUD_CONFIG.publishableKey) return null;
+  if (!window.WorkBuddyCloud || !window.WorkBuddyCloud.createWorkBuddyCloud) return null;
+  try{
+    cloud = window.WorkBuddyCloud.createWorkBuddyCloud({
+      endpoint: CLOUD_CONFIG.endpoint,
+      oauthRelayBaseUrl: CLOUD_CONFIG.oauthRelayBaseUrl,
+      publishableKey: CLOUD_CONFIG.publishableKey
+    });
+  }catch(e){ cloud = null; }
+  return cloud;
+}
+
+function maskPhone(v){
+  const d = String(v || '').replace(/\D/g, '');
+  return d.length >= 7 ? d.slice(-11, -8) + '****' + d.slice(-4) : '';
+}
+
+function accountLabel(){
+  const u = (session && session.user) || {};
+  if (u.name) return u.name;
+  const p = maskPhone(u.phone || u.phoneNumber || u.phone_number);
+  if (p) return p;
+  const mail = u.email || '';
+  if (mail){
+    const at = mail.indexOf('@');
+    return at > 1 ? mail.slice(0, 1) + '***' + mail.slice(at) : mail;
+  }
+  return '已登录';
+}
+
+function renderCloudChip(){
+  const chip = $('#cloudChip');
+  const txt = $('#cloudChipText');
+  if (session){
+    const name = accountLabel();
+    chip.classList.add('on');
+    txt.textContent = name.length > 9 ? name.slice(0, 9) + '…' : name;
+  } else {
+    chip.classList.remove('on');
+    txt.textContent = cloud ? '未登录 · 本机保存' : '本机保存';
+  }
+}
+
+/* ---------- 云：规则 ---------- */
+function rulesPayload(){
+  return {
+    budget: state.budget,
+    store_id: state.storeId,
+    pickup: state.pickup,
+    want: state.want,
+    avoid: state.avoid,
+    coupon_pref: state.couponPref,
+    nutrition: state.nutrition,
+    updated_at: new Date().toISOString(),
+    owner_name: session ? accountLabel() : null
+  };
+}
+
+async function pushRules(silent){
+  if (!cloud || !session) return false;
+  try{
+    const { data, error } = await cloud.database.from('mm_rules')
+      .upsert(rulesPayload(), { onConflict: 'owner_id' }).select();
+    if (error) throw error;
+    if (!Array.isArray(data) || !data.length) throw new Error('规则未写入（可能没有权限）');
+    if (!silent) toast('规则已同步到云端');
+    return true;
+  }catch(e){
+    if (!silent) toast('规则同步失败：' + (e.message || '网络异常'));
+    return false;
+  }
+}
+
+async function pullRules(){
+  if (!cloud || !session) return false;
+  try{
+    const { data, error } = await cloud.database.from('mm_rules')
+      .select('budget, store_id, pickup, want, avoid, coupon_pref, nutrition')
+      .limit(1);
+    if (error) throw error;
+    const row = Array.isArray(data) ? data[0] : null;
+    if (!row) return false;
+    state.budget = clamp(Number(row.budget) || 30, 12, 80);
+    state.storeId = findStore(row.store_id).id === row.store_id ? row.store_id : state.storeId;
+    state.pickup = PICKUPS[row.pickup] ? row.pickup : state.pickup;
+    state.want = Array.isArray(row.want) ? row.want : [];
+    state.avoid = Array.isArray(row.avoid) ? row.avoid : [];
+    state.couponPref = ['prefer','normal','none'].indexOf(row.coupon_pref) >= 0 ? row.coupon_pref : 'prefer';
+    state.nutrition = TARGETS[row.nutrition] ? row.nutrition : 'balanced';
+    saveLocal();
+    renderAll();
+    return true;
+  }catch(e){ return false; }
+}
+
+/* ---------- 云：方案 ---------- */
+function planPayload(ev, g, opts){
+  return {
+    group_key: g.key,
+    group_label: g.name,
+    title: ev.items.map(i => i.name).join(' + '),
+    items: ev.items.map(i => ({id:i.id, name:i.name, cat:i.cat, price:i.price, kcal:i.kcal, p:i.p, f:i.f, c:i.c, na:i.na})),
+    subtotal: ev.subtotal,
+    discount: ev.discount,
+    delivery_fee: ev.deliveryFee,
+    payable: ev.total,
+    kcal: ev.kcal,
+    protein: ev.protein,
+    fat: ev.fat,
+    na: ev.na,
+    reason: reasonFor(ev, g, opts),
+    store_id: opts.storeId,
+    store_name: currentStore().name,
+    pickup: opts.pickup,
+    budget: opts.budget,
+    nutrition_ref: opts.nutrition,
+    owner_name: session ? accountLabel() : null
+  };
+}
+
+async function savePlans(){
+  if (!decks || !decks.feasible){ toast('现在没有可保存的方案，先调整条件'); return; }
+  const rows = GROUPS.map(g => {
+    const deck = decks && decks.decks[g.key];
+    const pick = deck && deck[deckIdx[g.key] % deck.length];
+    return pick ? planPayload(pick.ev, g, lastOpts) : null;
+  }).filter(Boolean);
+  if (!rows.length){ toast('还没有可保存的方案'); return; }
+
+  /* 未登录：直接存本机，不用注册不用手机号 */
+  if (!cloud || !session){
+    const n = saveLocalPlans(rows);
+    savedCount = localPlans().length;
+    renderQuickCards();
+    toast(n ? '已保存到本机 · 登录后可云同步' : '本机保存失败，存储空间不足');
+    return;
+  }
+
+  const btn = $('#btnSave');
+  btn.disabled = true;
+  try{
+    const { data, error } = await cloud.database.from('mm_plans').insert(rows).select('id');
+    if (error) throw error;
+    const n = Array.isArray(data) ? data.length : 0;
+    if (!n) throw new Error('没有写入成功，请重新登录后再试');
+    savedCount += n;
+    renderQuickCards();
+    toast('已保存 ' + n + ' 个方案');
+  }catch(e){
+    toast('保存失败：' + (e.message || '网络异常'));
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+async function refreshSavedPlans(){
+  if (!cloud || !session){ savedCount = localPlans().length; renderQuickCards(); return; }
+  try{
+    const { count, error } = await cloud.database.from('mm_plans')
+      .select('id', { count: 'exact', head: true });
+    if (error) throw error;
+    savedCount = (count || 0) + localPlans().length;
+  }catch(e){ savedCount = localPlans().length; }
+  renderQuickCards();
+}
+
+/* ---------- 本机保存的方案（无需登录） ---------- */
+const LS_SAVED = 'maimai.saved.plans.v1';
+function localPlans(){
+  try{ const v = JSON.parse(localStorage.getItem(LS_SAVED) || '[]'); return Array.isArray(v) ? v : []; }
+  catch(e){ return []; }
+}
+function saveLocalPlans(rows){
+  try{
+    const list = localPlans();
+    rows.forEach(r => {
+      list.unshift(Object.assign({}, r, {
+        id: 'loc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        created_at: new Date().toISOString(),
+        local: true
+      }));
+    });
+    localStorage.setItem(LS_SAVED, JSON.stringify(list.slice(0, 50)));
+    return rows.length;
+  }catch(e){ return 0; }
+}
+function deleteLocalPlan(id){
+  const list = localPlans().filter(x => x.id !== id);
+  localStorage.setItem(LS_SAVED, JSON.stringify(list));
+}
+
+async function openHistory(){
+  openSheet('#histSheet');
+  const body = $('#histBody');
+  if (!cloud || !session){
+    /* 未登录：展示本机保存的方案 */
+    const rows = localPlans();
+    $('#histSub').textContent = '保存在这台设备上的方案（' + rows.length + ' 个）';
+    if (!rows.length){
+      body.innerHTML = '<div class="empty-note" style="background:#F8F9FB;border-radius:12px;padding:14px;font-size:13px;color:#8B93A2;line-height:1.6">'
+        + '还没有保存过方案。在结果页点「保存方案」，三组方案会一起存在这台手机上，不用注册也不用填手机号。</div>';
+      return;
+    }
+    body.innerHTML = '<ul class="hist">' + rows.map(r => {
+      const g = groupByKey(r.group_key);
+      return '<li><div class="h-main">'
+        + '<div class="h-top"><span class="h-group" style="--tone:' + g.tone + ';--soft:' + g.soft + '">' + esc(r.group_label || '') + '</span>'
+        + '<span class="h-title">' + esc(r.title || '') + '</span></div>'
+        + '<div class="h-sub">' + fmtDate(r.created_at) + ' · ' + r.kcal + ' 千卡 · 蛋白质 ' + r.protein + 'g · 本机</div>'
+        + '</div><span class="h-pay">' + pretty(Number(r.payable)) + '</span>'
+        + '<button class="h-del" data-del="' + esc(r.id) + '" aria-label="删除">✕</button></li>';
+    }).join('') + '</ul>'
+    + '<div class="fine">本机方案最多保留 50 条，只存在这台设备上。想换手机也能看到，可在顶部登录开启云同步。</div>';
+    return;
+  }
+  body.innerHTML = '<div class="empty-note" style="background:#F8F9FB;border-radius:12px;padding:14px;font-size:12px;color:#8B93A2">正在读取…</div>';
+  $('#histSub').textContent = '云端保存的方案';
+  try{
+    const { data, error } = await cloud.database.from('mm_plans')
+      .select('id, group_key, group_label, title, payable, kcal, protein, created_at')
+      .order('created_at', { ascending: false })
+      .limit(30);
+    if (error) throw error;
+    const rows = Array.isArray(data) ? data : [];
+    if (!rows.length){
+      body.innerHTML = '<div class="empty-note" style="background:#F8F9FB;border-radius:12px;padding:14px;font-size:12px;color:#8B93A2;line-height:1.6">还没有保存过方案。在结果页点「保存方案」，三组方案会一起存下来。</div>';
+      return;
+    }
+    body.innerHTML = '<ul class="hist">' + rows.map(r => {
+      const g = groupByKey(r.group_key);
+      return '<li><div class="h-main">'
+        + '<div class="h-top"><span class="h-group" style="--tone:' + g.tone + ';--soft:' + g.soft + '">' + r.group_label + '</span>'
+        + '<span class="h-title">' + r.title + '</span></div>'
+        + '<div class="h-sub">' + fmtDate(r.created_at) + ' · ' + r.kcal + ' 千卡 · 蛋白质 ' + r.protein + 'g</div>'
+        + '</div><span class="h-pay">' + pretty(Number(r.payable)) + '</span>'
+        + '<button class="h-del" data-del="' + r.id + '" aria-label="删除">✕</button></li>';
+    }).join('') + '</ul>'
+    + '<div class="fine">只显示最近 30 条。删除会从云端移除，无法恢复。</div>';
+  }catch(e){
+    body.innerHTML = '<div class="empty-note" style="background:#FFF7E6;border-radius:12px;padding:14px;font-size:12px;color:#8A5A00">读取失败：' + (e.message || '网络异常') + '</div>';
+  }
+}
+
+function fmtDate(v){
+  try{
+    const d = new Date(v);
+    const p = n => (n < 10 ? '0' + n : '' + n);
+    return (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }catch(e){ return ''; }
+}
+
+/* ---------- 登录：手机优先 + 微信 ---------- */
+let loginChannel = 'phone';
+const sendTimers = {};
+
+function isPublishedOrigin(){
+  if (location.protocol !== 'https:') return false;
+  const h = location.hostname;
+  return h !== 'localhost' && h !== '127.0.0.1' && h !== '';
+}
+
+function setLoginTab(ch){
+  loginChannel = ch;
+  [...document.querySelectorAll('#loginTabs button')].forEach(b => {
+    b.classList.toggle('on', b.dataset.tab === ch);
+  });
+  document.querySelectorAll('#loginSheet [data-pane]').forEach(p => {
+    p.classList.toggle('hide', p.dataset.pane !== ch);
+  });
+  loginErr('');
+  const hint = $('#wechatHint');
+  if (hint) hint.textContent = isPublishedOrigin() ? '' : '微信登录需要在已发布的线上地址使用（本地预览不支持回调）';
+}
+
+function openLogin(reason){
+  loginErr('');
+  $('#phoneErr').textContent = '';
+  setLoginTab('phone');
+  openSheet('#loginSheet');
+  if (reason) toast(reason);
+}
+function loginErr(msg){ $('#loginErr').textContent = msg; }
+function phoneErr(msg){ $('#phoneErr').textContent = msg; }
+
+function startCountdown(btn, label){
+  clearInterval(sendTimers[label]);
+  let left = 60;
+  btn.disabled = true;
+  btn.textContent = left + 's';
+  sendTimers[label] = setInterval(() => {
+    left--;
+    if (left <= 0){
+      clearInterval(sendTimers[label]);
+      btn.disabled = false;
+      btn.textContent = label === 'phone' ? '重新获取' : '重新发送';
+    } else btn.textContent = left + 's';
+  }, 1000);
+}
+
+async function sendCode(channel){
+  if (!cloud){ loginErr('云服务未就绪，请检查网络后刷新页面'); return; }
+  loginErr('');
+  if (channel === 'phone'){
+    const phone = ($('#phoneInput').value || '').replace(/\s/g, '');
+    phoneErr('');
+    if (!/^1\d{10}$/.test(phone)){
+      phoneErr('请输入正确的 11 位手机号');
+      return;
+    }
+    const btn = $('#btnSendPhone');
+    btn.disabled = true;
+    try{
+      const { data, error } = await cloud.auth.sendOtp({ phone: phone });
+      if (error) throw error;
+      pendingOtp = { channel: 'phone', value: phone, verificationId: data.verificationId, isExistingUser: data.isExistingUser };
+      toast('验证码已发送，请查收短信');
+      startCountdown(btn, 'phone');
+      $('#codeInput').focus();
+    }catch(e){
+      btn.disabled = false;
+      loginErr(e.message || '短信验证码发送失败');
+    }
+    return;
+  }
+
+  const email = ($('#emailInput').value || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ loginErr('请输入正确的邮箱地址'); return; }
+  const btn = $('#btnSendCode');
+  btn.disabled = true;
+  try{
+    const { data, error } = await cloud.auth.sendOtp({ email: email });
+    if (error) throw error;
+    pendingOtp = { channel: 'email', value: email, verificationId: data.verificationId, isExistingUser: data.isExistingUser };
+    toast('验证码已发送，请查收邮箱');
+    startCountdown(btn, 'email');
+    $('#codeInput').focus();
+  }catch(e){
+    btn.disabled = false;
+    loginErr(e.message || '验证码发送失败');
+  }
+}
+
+function afterLogin(){
+  closeSheets();
+  renderCloudChip();
+  renderQuickCards();
+}
+
+async function verifyCode(){
+  if (!pendingOtp){ loginErr('请先获取验证码'); return; }
+  const current = loginChannel === 'phone'
+    ? ($('#phoneInput').value || '').replace(/\s/g, '')
+    : ($('#emailInput').value || '').trim();
+  if (current !== pendingOtp.value){
+    loginErr(loginChannel === 'phone' ? '手机号已修改，请重新获取验证码' : '邮箱已修改，请重新获取验证码');
+    return;
+  }
+  const code = ($('#codeInput').value || '').trim();
+  if (!/^\d{4,8}$/.test(code)){ loginErr('请输入收到的验证码'); return; }
+  const btn = $('#btnVerify');
+  btn.disabled = true;
+  loginErr('');
+  try{
+    const payload = {
+      verificationId: pendingOtp.verificationId,
+      isExistingUser: pendingOtp.isExistingUser,
+      token: code
+    };
+    if (pendingOtp.channel === 'phone') payload.phone = pendingOtp.value;
+    else payload.email = pendingOtp.value;
+
+    const { error } = await cloud.auth.verifyOtp(payload);
+    if (error) throw error;
+    const got = await cloud.auth.getSession();
+    if (got.error || !got.data) throw new Error('登录状态获取失败，请重试');
+    session = got.data;
+    pendingOtp = null;
+    $('#codeInput').value = '';
+    afterLogin();
+    toast('登录成功，已开启云同步');
+    await pullRules();
+    await refreshSavedPlans();
+    if (pendingAction === 'savePlans'){ pendingAction = null; await savePlans(); }
+    else if (pendingAction === 'history'){ pendingAction = null; setTimeout(openHistory, 300); }
+  }catch(e){
+    loginErr(e.message || '验证码校验失败');
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+async function wechatLogin(){
+  if (!cloud){ loginErr('云服务未就绪，请检查网络后刷新页面'); return; }
+  if (!isPublishedOrigin()){
+    loginErr('微信登录需要在已发布的线上地址使用，本地预览走不通。可以先用手机号登录。');
+    return;
+  }
+  if (typeof cloud.auth.signInWithOAuth !== 'function'){
+    loginErr('当前 SDK 版本不支持微信登录，请刷新页面重试');
+    return;
+  }
+  const btn = $('#btnWechat');
+  btn.disabled = true;
+  loginErr('');
+  try{
+    const { data, error } = await cloud.auth.signInWithOAuth({
+      provider: 'wechat',
+      redirectTo: location.origin
+    });
+    if (error) throw error;
+    if (!data || !data.url) throw new Error('未能获取微信授权地址');
+    location.assign(data.url);
+  }catch(e){
+    btn.disabled = false;
+    loginErr(e.message || '微信登录发起失败');
+  }
+}
+
+/* 微信回调：必须在进入应用前处理，且只能处理一次 */
+async function restoreAuth(){
+  if (!cloud) return false;
+  const url = new URL(location.href);
+  if (url.searchParams.has('code') || url.searchParams.has('error')){
+    const provider = url.searchParams.get('provider');
+    if (provider === 'wechat'){
+      try{
+        const { data, error } = await cloud.auth.handleWechatWebCallback();
+        if (error) throw error;
+        if (data){
+          for (const key of ['code', 'state', 'provider']) url.searchParams.delete(key);
+          history.replaceState(null, '', url.pathname + url.search + url.hash);
+          session = data;
+          renderCloudChip();
+          showScreen('home');
+          toast('微信登录成功，已开启云同步');
+          await pullRules();
+          await refreshSavedPlans();
+          return true;
+        }
+      }catch(e){
+        for (const key of ['code', 'state', 'provider']) url.searchParams.delete(key);
+        history.replaceState(null, '', url.pathname + url.search + url.hash);
+        openLogin('微信登录未完成：' + (e.message || '请重试'));
+        return false;
+      }
+    } else if (url.searchParams.has('error') && provider){
+      loginErr('授权未完成，请重试');
+    }
+  }
+  try{
+    const { data, error } = await cloud.auth.getSession();
+    if (!error && data){
+      session = data;
+      renderCloudChip();
+      await pullRules();
+      await refreshSavedPlans();
+    }
+  }catch(e){ /* 离线或来源不匹配时保持本机模式 */ }
+  renderCloudChip();
+  return false;
+}
+
+async function signOut(){
+  try{ if (cloud) await cloud.auth.signOut(); }catch(e){}
+  session = null;
+  savedCount = 0;
+  closeSheets();
+  renderCloudChip();
+  renderQuickCards();
+  toast('已退出登录，规则仍保存在本机');
+}
+
+/* ---------- 设置页渲染 ---------- */
+function renderStore(){
+  const st = currentStore();
+  const city = cityOfStore(st.id);
+  const real = official.realStore;
+  const title = $('#cityTitle'), sub = $('#citySub');
+  if (title){
+    title.textContent = city.name;
+    sub.textContent = (city.prov === city.name ? '' : city.prov + ' · ')
+      + city.stores.length + ' 家门店 · 内地 ' + CITIES.length + ' 城可切';
+  }
+  const sel = $('#storeSelect');
+  if (sel){
+    const opts = [];
+    if (real && real.code){
+      opts.push('<option value="__real">🏬 ' + esc(realStoreName(real)) + '（真实门店）</option>');
+    }
+    opts.push(city.stores.map(s => '<option value="' + s.id + '">' + s.name + '</option>').join(''));
+    opts.push('<option value="__more">＋ 搜这个城市的其他门店…</option>');
+    sel.innerHTML = opts.join('');
+    sel.value = real ? '__real' : st.id;
+  }
+
+  if (real){
+    $('#storeMeta').innerHTML =
+      '<span>编号 ' + esc(real.code) + '</span>'
+      + '<span>' + (real.beType === 5 ? '得来速' : '到店自取') + '</span>'
+      + '<span>' + (OFFICIAL_MENU ? '官方价格已生效' : '待同步官方价格') + '</span>';
+  } else {
+    $('#storeMeta').innerHTML =
+      '<span>距你 ' + (st.dist >= 1000 ? (st.dist / 1000).toFixed(1) + ' km' : st.dist + ' m') + '</span>'
+      + '<span>出餐约 ' + st.wait + ' 分钟</span>'
+      + '<span>' + (st.soldout.length ? st.soldout.length + ' 件停售' : '全部在售') + '</span>';
+  }
+
+  const rep = menuReport(state.storeId, state.pickup);
+  const bits = ['本次可选 <b>' + rep.items.length + '</b> 件'];
+  if (rep.soldout.length) bits.push('停售 ' + rep.soldout.length + ' 件');
+  if (rep.channel.length) bits.push(PICKUPS[state.pickup].name + '不售 ' + rep.channel.length + ' 件');
+  bits.push(rep.official ? '官方菜单' : '示例菜单');
+  $('#menuStat').innerHTML = bits.join(' · ');
+
+  renderRealStore();
+}
+
+/* ---------- 城市选择面板 ---------- */
+function renderCityList(){
+  const kw = ($('#citySearch').value || '').trim().toLowerCase();
+  const cur = cityOfStore(state.storeId);
+
+  $('#cityHot').innerHTML = CITY_HOT.map(n => {
+    const c = CITY_BY_NAME[n];
+    if (!c) return '';
+    return '<button type="button" data-city="' + c.key + '"' + (c.key === cur.key ? ' class="on"' : '') + '>' + c.name + '</button>';
+  }).join('');
+
+  if (!kw && cur){
+    // 没有搜索时，先把当前城市放最上面
+    const first = '<button type="button" class="city-item on" data-city="' + cur.key + '">'
+      + '<b>' + cur.name + '（当前）</b><em>' + cur.stores.length + ' 家门店</em></button>';
+    $('#cityList').innerHTML = '<div class="prov-h">当前城市</div>' + first + buildCityGroups(kw, cur);
+  } else {
+    $('#cityList').innerHTML = buildCityGroups(kw, cur);
+  }
+  $('#cityList').scrollTop = 0;
+}
+
+function buildCityGroups(kw, cur){
+  let html = '', lastProv = '', hit = 0;
+  CITIES.forEach(c => {
+    if (kw){
+      const hay = (c.prov + c.name).toLowerCase();
+      if (hay.indexOf(kw) < 0) return;
+    }
+    if (c.prov !== lastProv){
+      html += '<div class="prov-h">' + (c.prov === c.name ? '直辖市' : c.prov) + '</div>';
+      lastProv = c.prov;
+    }
+    hit++;
+    html += '<button type="button" class="city-item' + (cur && c.key === cur.key ? ' on' : '') + '" data-city="' + c.key + '">'
+      + '<b>' + c.name + '</b><em>' + c.stores.length + ' 家门店</em></button>';
+  });
+  return hit ? html : '<div class="city-empty">没找到这个城市，换个说法试试（比如只输入城市名）</div>';
+}
+
+function openCitySheet(){
+  const total = $('#cityTotal');
+  if (total) total.textContent = CITIES.length;
+  const s = $('#citySearch');
+  if (s) s.value = '';
+  renderCityList();
+  openSheet('#citySheet');
+}
+
+function pickCity(key){
+  const c = cityOf(key);
+  const cur = cityOfStore(state.storeId);
+  if (cur.key === c.key){ closeSheets(); return; }
+  clearRealStore();
+  state.storeId = c.stores[0].id;
+  pruneWant();
+  renderAll();
+  closeSheets();
+  toast('已切到' + c.name + '，餐品、价格和停售按当地门店算');
+}
+
+function renderChips(){
+  const st = currentStore();
+  const host = {want: $('#wantGroups'), avoid: $('#avoidGroups')};
+  ['want', 'avoid'].forEach(mode => {
+    host[mode].innerHTML = CATS.map(cat => {
+      const chips = MENU.filter(i => i.cat === cat.key).map(i => {
+        const sold = st.soldout.includes(i.id);
+        const noChan = channelBlocked(i, state.pickup);
+        const selected = state[mode].indexOf(i.id) >= 0;
+        const locked = mode === 'want' ? state.avoid.indexOf(i.id) >= 0 : state.want.indexOf(i.id) >= 0;
+        const note = sold ? '售罄' : noChan ? PICKUPS[state.pickup].name + '不售' : pretty(itemPrice(i, st));
+        return '<button type="button" class="chip' + (selected ? ' on' : '') + (mode === 'avoid' ? ' chip-avoid' : '') + '"'
+          + ' data-mode="' + mode + '" data-id="' + i.id + '"' + (sold || noChan || locked ? ' disabled' : '') + '>'
+          + '<span>' + i.name + '</span><em>' + note + '</em></button>';
+      }).join('');
+      return '<div class="chip-group"><div class="cg-label">' + cat.name + '</div><div class="chips">' + chips + '</div></div>';
+    }).join('');
+  });
+}
+
+function renderBudget(){
+  $('#budgetNum').textContent = state.budget;
+  const range = $('#budgetRange');
+  range.value = state.budget;
+  range.style.setProperty('--p', ((state.budget - 12) / 68 * 100).toFixed(1) + '%');
+  $$('#quickBudget button').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === Number(state.budget)));
+}
+
+function renderSegs(){
+  $$('#segPickup button').forEach(b => b.classList.toggle('on', b.dataset.v === state.pickup));
+  $('#pickupDesc').textContent = PICKUPS[state.pickup].desc;
+  $$('#segCoupon button').forEach(b => b.classList.toggle('on', b.dataset.v === state.couponPref));
+  $('#couponDesc').textContent = state.couponPref === 'prefer'
+    ? '会主动凑单到券后最优，可能为了用券多加一件'
+    : state.couponPref === 'normal'
+      ? '有合适的券就用，不为了用券改变搭配'
+      : '完全不考虑优惠券，按原价算给你看';
+  $$('#segNutr button').forEach(b => b.classList.toggle('on', b.dataset.v === state.nutrition));
+  $('#nutrDesc').textContent = TARGETS[state.nutrition].desc;
+}
+
+function renderQuickCards(){
+  const st = currentStore();
+  $('#qRulesText').textContent = pretty(state.budget) + ' · ' + storeShortName(st);
+  $('#qRulesSub').textContent = PICKUPS[state.pickup].name + ' · ' + TARGETS[state.nutrition].label;
+  $('#qHistoryText').textContent = savedCount + ' 个';
+}
+
+function renderAll(){
+  renderStore();
+  renderChips();
+  renderBudget();
+  renderSegs();
+  renderQuickCards();
+  saveLocal();
+}
+
+/* ---------- 结果页 ---------- */
+function canAudit(){ return !!(official.realStore && official.realStore.code && OFFICIAL_MENU && OFFICIAL_MENU.length); }
+
+function auditInner(rec){
+  if (!rec) return '';
+  if (rec.status === 'pending') return '<div class="pending">正在用官方价格核对这组方案…</div>';
+  if (rec.status === 'ok'){
+    return '<div>官方核价：原价 <b>' + yuan(rec.orig) + '</b> · 优惠 <b>' + (rec.off > 0 ? '−' + yuan(rec.off) : '¥0.00')
+      + '</b> · 应付 <b>' + yuan(rec.pay) + '</b></div><div class="same">原价合计和本地估算一致</div>'
+      + (rec.note ? '<div class="off-note" style="margin-top:4px">' + esc(rec.note) + '</div>' : '');
+  }
+  if (rec.status === 'diff'){
+    return '<div>官方核价：原价 <b>' + yuan(rec.orig) + '</b> · 优惠 <b>' + (rec.off > 0 ? '−' + yuan(rec.off) : '¥0.00')
+      + '</b> · 应付 <b>' + yuan(rec.pay) + '</b></div>'
+      + '<div class="diff">比上面的估算' + (rec.diff > 0 ? '多' : '少') + ' ' + yuan(Math.abs(rec.diff)) + '，以官方结果为准</div>'
+      + (rec.note ? '<div class="off-note" style="margin-top:4px">' + esc(rec.note) + '</div>' : '');
+  }
+  if (rec.status === 'fail') return '<div class="diff">这次没核对成功：' + esc(rec.msg || '请稍后重试') + '</div>';
+  return '';
+}
+
+/* 每张方案卡下方的官方核价区：自动核完就显示结果，失败可以手动重试 */
+function auditBlock(gkey, pick){
+  if (!canAudit()){
+    return '<div class="off-note" style="margin-top:10px">金额是本地估算（示例菜单）。'
+      + '在设置的门店下拉下面点「搜这个城市的真实门店」，选中后每张方案都会自动用官方价格核对。</div>';
+  }
+  const rec = decks && decks.checks ? decks.checks[pick.sig] : null;
+  const status = rec ? rec.status : 'idle';
+  const body = auditInner(rec);
+  const label = status === 'idle' ? '用官方价格核一遍' : (status === 'pending' ? '核对中…' : '重新核对');
+  return '<button class="off-check' + (status === 'pending' ? ' hide' : '') + '" data-offcheck="' + gkey + '" type="button">'
+    + label + '</button>'
+    + '<div class="off-result' + (body ? '' : ' hide') + '" id="offres_' + gkey + '">' + body + '</div>';
+}
+
+function updateAuditBar(){
+  const bar = $('#auditBar'), txt = $('#auditText');
+  if (!bar || !txt || !decks) return;
+  bar.classList.remove('hide', 'run', 'ok', 'diff', 'off');
+  if (!canAudit()){
+    bar.classList.add('off');
+    txt.textContent = '金额是本地估算。在设置的门店下拉下面点「搜这个城市的真实门店」，选中后每出一组方案都会自动用官方价格核对。';
+    return;
+  }
+  const recs = GROUPS.map(g => {
+    const deck = decks.decks[g.key] || [];
+    if (!deck.length) return null;
+    return decks.checks[deck[deckIdx[g.key] % deck.length].sig] || {status: 'idle'};
+  }).filter(Boolean);
+  if (!recs.length){ bar.classList.add('hide'); return; }
+
+  const pending = recs.filter(r => r.status === 'pending' || r.status === 'idle').length;
+  const ok = recs.filter(r => r.status === 'ok').length;
+  const diff = recs.filter(r => r.status === 'diff').length;
+  const fail = recs.filter(r => r.status === 'fail').length;
+
+  if (pending){
+    bar.classList.add('run');
+    txt.textContent = '正在用官方价格核对 ' + (recs.length - pending) + ' / ' + recs.length + ' 组方案…';
+    return;
+  }
+  if (diff || fail){
+    bar.classList.add('diff');
+    txt.innerHTML = '官方核价：' + ok + ' 组一致'
+      + (diff ? '，<b>' + diff + ' 组金额有差异</b>' : '')
+      + (fail ? '，' + fail + ' 组没核成功' : '')
+      + '。差的那几组以官方返回为准。';
+    return;
+  }
+  bar.classList.add('ok');
+  txt.textContent = recs.length + ' 组方案都核对过了，原价合计和本地估算一致。';
+}
+
+function renderResultHead(){
+  const opts = lastOpts;
+  const st = currentStore();
+  const city = cityOfStore(st.id);
+  const realName = OFFICIAL_MENU && official.realStore
+    ? String(official.realStore.name).replace(/^麦当劳/, '').replace(new RegExp('^' + city.short), '').replace(/^./, c => c) : '';
+  const realShort = realName && realName !== city.short ? realName : String(official.realStore ? official.realStore.name : '').replace(/^麦当劳/, '');
+  $('#resSub').textContent = (realShort ? city.short + ' · ' + realShort : city.short + ' · ' + storeShortName(st))
+    + ' · ' + PICKUPS[opts.pickup].name + (realShort ? '（真实价格）' : '');
+  $('#resSum').innerHTML =
+    '<span class="tagp">' + city.short + '</span>'
+    + '<span class="tagp">预算 ' + pretty(opts.budget) + '</span>'
+    + '<span class="tagp">' + TARGETS[opts.nutrition].label + '</span>'
+    + '<span class="tagp">' + (opts.couponPref === 'prefer' ? '优先用券' : opts.couponPref === 'normal' ? '顺其自然' : '不用券') + '</span>'
+    + (OFFICIAL_MENU ? '' : '<span class="tagp tag-demo">示例数据</span>')
+    + (opts.want.length ? '<span class="tagp">必吃 ' + opts.want.length + ' 项</span>' : '')
+    + (opts.avoid.length ? '<span class="tagp">忌口 ' + opts.avoid.length + ' 项</span>' : '');
+}
+
+function setResultBar(hasPlans){
+  ['#btnShuffle', '#btnSave', '#btnGo'].forEach(sel => {
+    const b = $(sel);
+    if (b) b.disabled = !hasPlans;
+  });
+}
+
+/* 无解：不编方案，把冲突摊开说，并给六个可执行的调整方向 */
+function renderNoSolution(){
+  const opts = lastOpts;
+  const diag = diagnose(opts, decks.scan);
+  const acts = actionsFor(opts, diag);
+  decks.diag = diag;
+  decks.actions = acts;
+
+  const city = diag.city;
+  const head = '预算 ' + pretty(opts.budget) + ' · ' + TARGETS[opts.nutrition].label + ' · '
+    + PICKUPS[opts.pickup].name + ' · ' + city.short + ' · 必吃 ' + opts.want.length + ' 项'
+    + (opts.avoid.length ? ' · 忌口 ' + opts.avoid.length + ' 项' : '');
+
+  const html = '<section class="ns-card">'
+    + '<div class="ns-head"><div class="ns-ico">!</div><div>'
+      + '<h3>这几个条件没法同时满足</h3>'
+      + '<p>' + head + '——按现在的条件，一个方案都算不出来。下面写清楚卡在哪，点一下放开对应条件就会重算。</p>'
+    + '</div></div>'
+    + '<ul class="ns-list">' + diag.conflicts.map(c =>
+        '<li><div class="ns-t"><em>' + c.tag + '</em>' + c.title + '</div>'
+        + '<div class="ns-d">' + c.detail + '</div></li>').join('') + '</ul>'
+    + '<div class="ns-act-title">放开一个条件，马上重算</div>'
+    + '<div class="ns-acts">' + acts.map((a, i) =>
+        '<button class="ns-act" data-adjust="' + a.key + '" type="button"' + (a.ok ? '' : ' disabled') + '>'
+        + '<span class="n">' + (i + 1) + '</span>'
+        + '<span class="tx"><b>' + a.label + '</b><span>' + a.detail + '</span></span>'
+        + '<span class="go">' + (a.ok ? '重算 ›' : '不可用') + '</span></button>').join('') + '</div>'
+    + '<div class="ns-note">每个按钮都先试算过，确认改完真能出方案才可点。需要连带调整营养参考或预算时，会直接写在按钮上；其它设置保持不动。</div>'
+    + '</section>';
+
+  $('#resBody').innerHTML = html;
+  $('#auditBar').classList.add('hide');
+  renderResultHead();
+  $('#algoBody').innerHTML =
+    '先按<b>门店 + 取餐方式</b>筛餐品，再排除忌口、锁定必吃项，穷举出 <b>' + decks.totalPlans + ' 种组合</b>。'
+    + '然后同时卡三道硬条件：<b>实际应付 ≤ ' + pretty(opts.budget) + '</b>、<b>达到「' + TARGETS[opts.nutrition].label + '」</b>、'
+    + '<b>必吃项都点得到</b>。三道全过的组合是 <b>' + decks.poolSize + ' 种</b>，为 0 就判定无解——'
+    + '不会拿超预算、不合营养参考的搭配凑数，也不会把点不到的餐品写进方案。';
+  setResultBar(false);
+}
+
+function renderCards(){
+  const opts = lastOpts;
+  if (!decks || !decks.feasible){ renderNoSolution(); return; }
+
+  const collapsed = [];
+  const seen = new Set();
+  const html = GROUPS.map(g => {
+    const deck = decks.decks[g.key] || [];
+    if (!deck.length){
+      return '<article class="pcard" style="--tone:' + g.tone + ';--soft:' + g.soft + '">'
+        + '<div class="pcard-head"><span class="pcard-badge">' + g.name + '</span></div>'
+        + '<p class="pcard-title" style="color:#8B93A2;font-size:13.5px;font-weight:500">这组没有更合适的搭配了，可以「换一组方案」或回设置调整条件。</p>'
+        + '</article>';
+    }
+    const idx = deckIdx[g.key] % deck.length;
+    const pick = deck[idx];
+    if (seen.has(pick.sig)){ collapsed.push(g.name); return ''; }
+    seen.add(pick.sig);
+    const ev = pick.ev;
+    const t = TARGETS[opts.nutrition] || TARGETS.any;
+    const itemRows = ev.items.map(i =>
+      '<li><span class="it-name">' + i.name + '</span><span class="it-kcal">' + i.kcal + ' kcal</span>'
+      + '<span class="it-price">' + pretty(i.price) + '</span></li>').join('');
+    const couponText = ev.coupon
+      ? '已用「' + ev.coupon.name + '」'
+      : (opts.couponPref === 'none' ? '按不用券计算' : '无可用券');
+    const feeText = ev.deliveryFee > 0 ? '含配送费 ' + yuan(ev.deliveryFee) : (opts.pickup === 'delivery' ? '已免配送费' : '无配送费');
+
+    const kcalDelta = ev.kcal - t.kcal;
+    const protDelta = ev.protein - t.protein;
+    return '<article class="pcard" style="--tone:' + g.tone + ';--soft:' + g.soft + '">'
+      + '<div class="pcard-head"><span class="pcard-badge">' + g.name + '</span>'
+        + '<span class="pcard-idx">' + (idx + 1) + ' / ' + deck.length + '</span></div>'
+      + '<div class="money">'
+        + '<div><span>总价</span><b>' + pretty(ev.subtotal) + '</b></div>'
+        + '<div class="off"><span>优惠</span><b>' + (ev.discount > 0 ? '−' + yuan(ev.discount) : '¥0.00') + '</b></div>'
+        + '<div class="pay"><span>实际应付</span><b>' + pretty(ev.total) + '</b></div>'
+      + '</div>'
+      + '<div class="money-foot"><span>' + couponText + '</span><span>' + feeText + '</span></div>'
+      + '<div class="nutr-grid">'
+        + '<div><b>' + ev.kcal + '</b><span>千卡</span><em class="' + (Math.abs(kcalDelta) <= 80 ? 'ok' : (kcalDelta > 0 ? 'hi' : '')) + '">目标 ' + t.kcal + '</em></div>'
+        + '<div><b>' + ev.protein + 'g</b><span>蛋白质</span><em class="' + (protDelta >= 0 ? 'ok' : '') + '">目标 ' + t.protein + 'g</em></div>'
+        + '<div><b>' + ev.fat + 'g</b><span>脂肪</span><em>每日 ' + Math.round(ev.fat / DAILY.fat * 100) + '%</em></div>'
+        + '<div><b>' + ev.na + '</b><span>钠 mg</span><em>每日 ' + Math.round(ev.na / DAILY.na * 100) + '%</em></div>'
+      + '</div>'
+      + '<div class="items-title">这组吃什么 · ' + ev.items.length + ' 件</div>'
+      + '<ul class="items">' + itemRows + '</ul>'
+      + '<div class="reason"><span>推荐理由</span><p>' + reasonFor(ev, g, opts) + '</p></div>'
+      + auditBlock(g.key, pick, opts)
+      + '</article>';
+  }).join('');
+
+  let out = '';
+  if (collapsed.length){
+    out += '<div class="warn" style="background:#F4F5F8;border-color:#E7EAF0;color:var(--ink2)">'
+      + '这个条件比较紧，「' + collapsed.join('」「') + '」和上面某组收敛到了同一种搭配，这里没有重复列出。</div>';
+  }
+  out += html;
+  out += '<p class="off-note" style="border:none;padding:0 2px">'
+    + (OFFICIAL_MENU ? '餐品与价格来自麦当劳官方接口实时返回。' : '当前为示例菜单，在设置的门店下拉下面点「搜这个城市的真实门店」，就能用官方价格算。')
+    + '优惠与金额以当前门店及麦当劳官方 App 返回结果为准，本工具只做点餐前的比较。'
+    + '营养数字只是参考，不构成饮食或健康建议。'
+    + '</p>';
+  $('#resBody').innerHTML = out;
+  updateAuditBar();
+
+  renderResultHead();
+  const rep = decks.menu;
+  $('#algoBody').innerHTML =
+    '第一步，按<b>门店 + 取餐方式</b>筛餐品：当前门店可售 <b>' + rep.items.length + ' 件</b>'
+      + (rep.soldout.length ? '，剔除停售 ' + rep.soldout.length + ' 件' : '')
+      + (rep.channel.length ? '，剔除' + PICKUPS[opts.pickup].name + '不售的 ' + rep.channel.length + ' 件' : '')
+    + '。第二步，在剩下的餐品里排除忌口、锁定必吃项，按「1 主餐 + 至多 1 小食 / 1 饮品 / 1 甜品」穷举成 <b>'
+      + decks.totalPlans + ' 种组合</b>，其中 <b>' + decks.inBudget + ' 种</b>落在预算内，'
+      + '同时达到「' + TARGETS[opts.nutrition].label + '」的有 <b>' + decks.poolSize + ' 种</b>，作为候选池。'
+    + '第三步，套用你能用的优惠券（不叠加，取最优），按 <b>营养贴合度、性价比、优惠力度、口味</b> 打分，'
+      + '「预算优先 / 营养参考优先 / 口味优先」各取一叠候选，每叠内部要求主餐或配餐不同。'
+    + '第四步，每张方案都用官方 <b>价格计算</b> 核对总价、优惠与应付，对不上的会标出来并说明。';
+  setResultBar(true);
+}
+
+/* ---------- 按建议调整条件 ---------- */
+function currentOpts(){
+  return {
+    budget: state.budget,
+    storeId: state.storeId,
+    pickup: state.pickup,
+    want: state.want.slice(),
+    avoid: state.avoid.slice(),
+    couponPref: state.couponPref,
+    nutrition: state.nutrition
+  };
+}
+
+/* 无解页的六个按钮：重算一遍拿最新建议，再只改那一项 */
+function applyAdjust(key){
+  const opts = currentOpts();
+  const acts = actionsFor(opts, diagnose(opts));
+  const a = acts.filter(x => x.key === key)[0];
+  if (!a || !a.ok || !a.patch){ toast((a && a.why) || '这个方向调不开，换一个试试'); return; }
+  const p = a.patch;
+  if (p.budget !== undefined) state.budget = clamp(Number(p.budget) || state.budget, 12, 80);
+  if (p.nutrition !== undefined) state.nutrition = p.nutrition;
+  if (p.pickup !== undefined) state.pickup = p.pickup;
+  if (p.storeId !== undefined) state.storeId = findStore(p.storeId).id;
+  if (p.want !== undefined) state.want = p.want.slice();
+  if (p.avoid !== undefined) state.avoid = p.avoid.slice();
+  if (p.pickup !== undefined) pruneWant();
+  if (official.realStore && (p.storeId !== undefined || (p.pickup !== undefined && !realDataPickupOk()))) clearRealStore();
+  renderAll();
+  calc(false);
+  toast(a.label + '：' + a.detail);
+}
+
+/* ---------- 计算 ---------- */
+function calc(shuffle){
+  const opts = {
+    budget: state.budget,
+    storeId: state.storeId,
+    pickup: state.pickup,
+    want: state.want.slice(),
+    avoid: state.avoid.slice(),
+    couponPref: state.couponPref,
+    nutrition: state.nutrition
+  };
+  lastOpts = opts;
+  decks = buildDecks(opts);
+  decks.checks = {};
+  if (!shuffle) deckIdx = {budget:0, nutrition:0, taste:0};
+
+  renderCards();
+  showScreen('result');
+  if (session) pushRules(true);
+  if (decks.feasible) auditVisible();
+  else window.scrollTo({ top: 0 });
+}
+
+function shuffleDecks(){
+  if (!decks) { calc(false); return; }
+  if (!decks.feasible){ toast('现在没有方案可换，先按上面的建议调开一个条件'); return; }
+  let moved = false;
+  GROUPS.forEach(g => {
+    const len = (decks.decks[g.key] || []).length;
+    if (len > 1){ deckIdx[g.key] = (deckIdx[g.key] + 1) % len; moved = true; }
+  });
+  if (!moved){ toast('这个条件下每组只有一种搭配了'); return; }
+  renderCards();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  auditVisible();
+}
+
+/* ---------- 屏幕切换 ---------- */
+function showScreen(name){
+  ['home', 'setup', 'result'].forEach(k => {
+    $('#screen' + k.charAt(0).toUpperCase() + k.slice(1)).classList.toggle('hide', k !== name);
+  });
+  $('#barSetup').classList.toggle('hide', name !== 'setup');
+  $('#barResult').classList.toggle('hide', name !== 'result');
+  window.scrollTo({ top: 0 });
+}
+
+/* ---------- sheet ---------- */
+function openSheet(sel){
+  document.body.classList.add('lock');
+  const el = $(sel);
+  el.classList.add('on');
+  const panel = el.querySelector('.sheet-panel');
+  if (panel) panel.scrollTop = 0;
+}
+function closeSheets(){
+  $$('.sheet').forEach(s => s.classList.remove('on'));
+  document.body.classList.remove('lock');
+}
+
+function copyText(){
+  if (!decks || !lastOpts) return '';
+  const lines = ['【麦麦点前算】点餐清单', '门店：' + currentStore().name, '取餐：' + PICKUPS[lastOpts.pickup].name, ''];
+  GROUPS.forEach(g => {
+    const deck = decks.decks[g.key] || [];
+    if (!deck.length) return;
+    const ev = deck[deckIdx[g.key] % deck.length].ev;
+    lines.push('· ' + g.name + '：' + ev.items.map(i => i.name).join(' + '));
+    lines.push('  总价 ' + yuan(ev.subtotal) + '，优惠 ' + yuan(ev.discount)
+      + (ev.deliveryFee ? '，配送费 ' + yuan(ev.deliveryFee) : '') + '，应付 ' + yuan(ev.total));
+  });
+  return lines.join('\n');
+}
+
+async function doCopy(text){
+  let ok = false;
+  try{ if (navigator.clipboard) { await navigator.clipboard.writeText(text); ok = true; } }catch(e){}
+  if (!ok){
+    try{
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); ok = true;
+    }catch(e){}
+  }
+  toast(ok ? '清单已复制' : '复制失败，请手动选择');
+}
+
+function openGo(){
+  if (!decks || !decks.feasible){ toast('现在没有方案可下单，先调整条件'); return; }
+  const st = currentStore();
+  const text = copyText();
+  const first = (decks.decks.budget || [])[0];
+  $('#goBody').innerHTML =
+    '<h2>前往麦当劳官方 App</h2>'
+    + '<p class="sheet-sub">这里只做「点之前的计算」，下单和支付都在麦当劳官方 App 里完成。</p>'
+    + '<ol class="steps">'
+      + '<li>打开手机上的 <b>麦当劳 App</b>（或官方小程序）</li>'
+      + '<li>门店选 <b>' + st.name + '</b>，取餐方式选 <b>' + PICKUPS[lastOpts.pickup].name + '</b></li>'
+      + '<li>按下面清单逐项加购，结算时手动勾选优惠券</li>'
+      + '<li>核对金额后完成支付</li>'
+    + '</ol>'
+    + '<div class="field"><label>点餐清单</label><div class="copybox">' + text + '</div></div>'
+    + '<div class="sheet-actions"><button class="btn-ghost" id="btnCopy">复制清单</button>'
+      + '<a class="link-btn" href="https://www.mcdonalds.com.cn/" target="_blank" rel="noopener">打开麦当劳官网</a></div>'
+    + '<div class="fine">价格与营养为示例数据；优惠券是否可用以你账号内看到的为准。本页面不会替你下单或支付。</div>';
+  openSheet('#goSheet');
+  const cp = $('#btnCopy');
+  if (cp) cp.addEventListener('click', () => doCopy(text));
+  if (first) doCopy(text);
+}
+
+/* ---------- 事件 ---------- */
+function bind(){
+  $('#homeStart').addEventListener('click', () => { showScreen('setup'); });
+  $('#homeRules').addEventListener('click', () => { showScreen('setup'); toast('已带出上次的规则'); });
+  $('#homeHistory').addEventListener('click', () => {
+    if (!session) pendingAction = 'history';
+    openHistory();
+  });
+  $('#cloudChip').addEventListener('click', () => {
+    if (session){
+      openSheet('#histSheet');
+      $('#histSub').textContent = '云端保存的方案';
+      $('#histBody').innerHTML = '<div class="empty-note" style="background:#F8F9FB;border-radius:12px;padding:14px;font-size:12px;color:#8B93A2">加载中…</div>';
+      openHistory();
+    } else {
+      openLogin('登录后规则和方案会保存到云端');
+    }
+  });
+
+  $('#setupBack').addEventListener('click', () => showScreen('home'));
+  $('#resultBack').addEventListener('click', () => showScreen('setup'));
+  $('#btnCalc').addEventListener('click', () => calc(false));
+  $('#btnRecalc').addEventListener('click', () => showScreen('setup'));
+  $('#btnShuffle').addEventListener('click', shuffleDecks);
+  $('#btnSave').addEventListener('click', savePlans);
+  $('#btnGo').addEventListener('click', openGo);
+
+  $('#quickBudget').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    state.budget = Number(b.dataset.v);
+    renderBudget(); saveLocal();
+  });
+  $('#budgetRange').addEventListener('input', e => {
+    state.budget = Number(e.target.value);
+    renderBudget(); saveLocal();
+  });
+  $('#storeSelect').addEventListener('change', e => {
+    const v = e.target.value;
+    if (v === '__more'){ e.target.value = official.realStore ? '__real' : state.storeId; openRealSheet(); return; }
+    if (v === '__real'){ e.target.value = '__real'; return; }
+    if (official.realStore) clearRealStore();
+    state.storeId = v;
+    pruneWant();
+    renderAll();
+  });
+  $('#cityPick').addEventListener('click', openCitySheet);
+  $('#citySearch').addEventListener('input', renderCityList);
+  $('#citySearch').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+
+  document.addEventListener('click', e => {
+    const offBtn = e.target.closest('[data-offcheck]');
+    if (offBtn){
+      const key = offBtn.dataset.offcheck;
+      verifyPlan(key, true).then(rec => {
+        if (rec && rec.status === 'fail') toast('核对失败：' + rec.msg);
+        else if (rec && rec.status === 'diff') toast('官方金额和估算有差异，已标出');
+      });
+    }
+  });
+
+  document.addEventListener('click', e => {
+    const adj = e.target.closest('[data-adjust]');
+    if (adj){
+      if (!adj.disabled) applyAdjust(adj.dataset.adjust);
+      return;
+    }
+    const cityBtn = e.target.closest('#citySheet [data-city]');
+    if (cityBtn){ pickCity(cityBtn.dataset.city); return; }
+    const chip = e.target.closest('.chip');
+    if (chip && !chip.disabled){
+      const mode = chip.dataset.mode, id = chip.dataset.id;
+      const arr = state[mode];
+      const i = arr.indexOf(id);
+      if (i >= 0) arr.splice(i, 1);
+      else {
+        if (mode === 'want' && arr.length >= 3){ toast('必吃最多选 3 个'); return; }
+        arr.push(id);
+      }
+      renderChips(); renderQuickCards(); saveLocal();
+      return;
+    }
+    const seg = e.target.closest('#segPickup button, #segCoupon button, #segNutr button');
+    if (seg){
+      const v = seg.dataset.v;
+      const isPickup = seg.parentElement.id === 'segPickup';
+      if (isPickup) state.pickup = v;
+      else if (seg.parentElement.id === 'segCoupon') state.couponPref = v;
+      else state.nutrition = v;
+      if (isPickup){
+        pruneWant();
+        renderChips();
+        renderStore();
+        /* 真实门店是按取餐方式查的：得来速自动换到最近的得来速餐厅；外送不支持就退回示例门店 */
+        if (official.realStore){
+          if (realDataPickupOk()) rematchPickup();
+          else { clearRealStore(); renderStore(); toast('外送查不到官方价格，已切回示例门店'); }
+        }
+      }
+      renderSegs(); renderQuickCards(); saveLocal();
+      return;
+    }
+    if (e.target.closest('[data-close]')){ closeSheets(); return; }
+    const del = e.target.closest('[data-del]');
+    if (del){
+      deletePlan(del.dataset.del, del);
+      return;
+    }
+  });
+
+  $('#loginTabs').addEventListener('click', e => {
+    const b = e.target.closest('button[data-tab]');
+    if (b) setLoginTab(b.dataset.tab);
+  });
+  $('#btnSendPhone').addEventListener('click', () => sendCode('phone'));
+  $('#btnSendCode').addEventListener('click', () => sendCode('email'));
+  $('#btnVerify').addEventListener('click', verifyCode);
+  $('#btnWechat').addEventListener('click', wechatLogin);
+  $('#phoneInput').addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 11);
+    phoneErr('');
+    loginErr('');
+  });
+  $('#phoneInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendCode('phone'); });
+  $('#emailInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendCode('email'); });
+  $('#codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') verifyCode(); });
+}
+
+async function deletePlan(id, el){
+  /* 本机方案：直接从 localStorage 删 */
+  if (String(id).indexOf('loc_') === 0){
+    deleteLocalPlan(id);
+    const li = el.closest('li');
+    if (li) li.remove();
+    savedCount = localPlans().length;
+    renderQuickCards();
+    toast('已删除');
+    return;
+  }
+  if (!cloud || !session) return;
+  try{
+    const { data, error } = await cloud.database.from('mm_plans').delete().eq('id', Number(id)).select('id');
+    if (error) throw error;
+    if (!Array.isArray(data) || !data.length){ toast('删除失败：这条方案不属于当前账号'); return; }
+    const li = el.closest('li');
+    if (li) li.remove();
+    savedCount = Math.max(0, savedCount - 1);
+    renderQuickCards();
+    toast('已删除');
+  }catch(e){
+    toast('删除失败：' + (e.message || '网络异常'));
+  }
+}
+
+/* ================= 麦当劳官方数据（MCP） ================= */
+const OFF_LS = 'maimai.mcd.v1';
+/* 麦当劳 MCP Token 不写进前端：由 server.js 从环境变量 MCD_TOKEN 读取并在服务端附加。
+   这里留空；本地调试若想临时手填，可在浏览器控制台设置 localStorage 的 maimai.mcd.v1.token。 */
+const MCD_DEFAULT_TOKEN = '';
+let OFFICIAL_MENU = null;
+
+const official = {
+  token: MCD_DEFAULT_TOKEN,
+  realStore: null,      // {code, name, address, beCode, beType}
+  candidates: [],       // 最近一次搜门店的结果
+  products: [],
+  nutrition: [],
+  storeCoupons: [],
+  myCoupons: [],
+  lastSync: 0,
+  menuPickup: '',
+  sync: {status: 'idle', msg: ''},   // idle | run | ok | fail
+  calls: 0,
+  busy: false,
+  queued: false,
+  inflight: {}
+};
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function loadOfficial(){
+  try{
+    const raw = localStorage.getItem(OFF_LS);
+    if (!raw) return;
+    const o = JSON.parse(raw);
+    official.token = o.token || MCD_DEFAULT_TOKEN;
+    official.realStore = o.realStore || null;
+    official.products = o.products || [];
+    official.nutrition = o.nutrition || [];
+    official.storeCoupons = o.storeCoupons || [];
+    official.myCoupons = o.myCoupons || [];
+    official.lastSync = o.lastSync || 0;
+    official.menuPickup = o.menuPickup || '';
+  }catch(e){}
+}
+function saveOfficial(){
+  try{
+    localStorage.setItem(OFF_LS, JSON.stringify({
+      token: official.token,
+      realStore: official.realStore,
+      products: official.products.slice(0, 400),
+      nutrition: official.nutrition.slice(0, 400),
+      storeCoupons: official.storeCoupons.slice(0, 60),
+      myCoupons: official.myCoupons.slice(0, 60),
+      lastSync: official.lastSync,
+      menuPickup: official.menuPickup
+    }));
+  }catch(e){}
+}
+
+/* --- 后端代理调用 --- */
+async function mcdApi(path, body){
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 25000);
+  try{
+    const res = await fetch(path, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body),
+      signal: ctrl.signal
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.ok === false) throw new Error(data.error || ('请求失败 ' + res.status));
+    return data;
+  }catch(e){
+    if (e.name === 'AbortError') throw new Error('请求超时，请重试');
+    if (String(e.message).indexOf('fetch') >= 0) throw new Error('连不上官方接口，检查网络后再试一次');
+    throw e;
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+/* 一次调用同时拿到文本与结构化结果（官方 structured 才是干净数据） */
+async function mcdCallFull(tool, args){
+  official.calls++;
+  const out = await mcdApi('/api/mcd/call', {token: official.token, tool: tool, args: args || {}});
+  const s = out.structured && typeof out.structured === 'object' ? out.structured : null;
+  return {
+    text: out.text || '',
+    structured: s,
+    data: s && s.data !== undefined ? s.data : null,
+    ok: s ? s.success !== false : true,
+    message: (s && s.message) || ''
+  };
+}
+async function mcdCall(tool, args){
+  const out = await mcdCallFull(tool, args);
+  return out.text || '';
+}
+
+/* structured.data → 记录数组（兼容 JSON 数组 / TOON 文本 / 包装对象） */
+function recordsFrom(out){
+  const d = out ? out.data : null;
+  if (Array.isArray(d)) return d.filter(x => x && typeof x === 'object');
+  if (typeof d === 'string'){
+    const toon = parseToon(d);
+    if (toon.length) return toon;
+    try{ return recordsOf(JSON.parse(d)); }catch(e){ return []; }
+  }
+  if (d && typeof d === 'object') return recordsOf(d);
+  return [];
+}
+
+/* --- TOON / JSON 解析 --- */
+function splitCsv(line){
+  const out = [];
+  let cur = '', q = false;
+  for (let i = 0; i < line.length; i++){
+    const ch = line[i];
+    if (ch === '"'){
+      if (q && line[i + 1] === '"'){ cur += '"'; i++; }
+      else q = !q;
+    } else if (ch === ',' && !q){ out.push(cur.trim()); cur = ''; }
+    else cur += ch;
+  }
+  out.push(cur.trim());
+  return out;
+}
+
+function parseToon(text){
+  const lines = String(text || '').split(/\r?\n/);
+  const rows = [];
+  for (let i = 0; i < lines.length; i++){
+    const m = lines[i].match(/^\s*\[(\d+)\]\{([^}]*)\}:\s*$/);
+    if (!m) continue;
+    const fields = m[2].split(',').map(s => s.trim());
+    const n = Number(m[1]);
+    let got = 0;
+    for (let j = i + 1; j < lines.length && got < n; j++){
+      const line = lines[j];
+      if (!line.trim()) continue;
+      if (/^\s*\[\d+\]\{/.test(line)) break;
+      if (/^\s*[A-Za-z0-9_]+\s*:/.test(line) && splitCsv(line).length < fields.length) break;
+      const vals = splitCsv(line.replace(/^\s*-\s*/, '').trim());
+      const obj = {};
+      fields.forEach((f, k) => { obj[f] = vals[k] === undefined ? '' : vals[k]; });
+      rows.push(obj);
+      got++;
+    }
+  }
+  return rows;
+}
+
+function parseToolPayload(text){
+  const raw = String(text || '').trim();
+  let obj = null;
+  try{ obj = JSON.parse(raw); }catch(e){}
+  if (!obj){
+    const toon = parseToon(raw);
+    return toon.length ? toon : [];
+  }
+  const data = obj && obj.data !== undefined ? obj.data : obj;
+  if (typeof data === 'string'){
+    const t = data.trim();
+    try{ return JSON.parse(t); }catch(e){}
+    const toon = parseToon(t);
+    return toon.length ? toon : [];
+  }
+  return data;
+}
+
+function pick(o, names){
+  if (!o || typeof o !== 'object') return undefined;
+  const keys = Object.keys(o);
+  for (const n of names){
+    const hit = keys.find(k => k.toLowerCase() === n.toLowerCase());
+    if (hit !== undefined && o[hit] !== '' && o[hit] !== null && o[hit] !== undefined) return o[hit];
+  }
+  for (const n of names){
+    const hit = keys.find(k => k.toLowerCase().includes(n.toLowerCase()));
+    if (hit !== undefined && o[hit] !== '' && o[hit] !== null && o[hit] !== undefined) return o[hit];
+  }
+  return undefined;
+}
+
+function recordsOf(payload){
+  if (Array.isArray(payload)) return payload.filter(x => x && typeof x === 'object');
+  if (!payload || typeof payload !== 'object') return [];
+  const found = [];
+  const walk = (node, depth) => {
+    if (!node || depth > 4) return;
+    if (Array.isArray(node)){
+      const objs = node.filter(x => x && typeof x === 'object' && !Array.isArray(x));
+      if (objs.length > found.length) { found.length = 0; objs.forEach(o => found.push(o)); }
+      node.forEach(x => walk(x, depth + 1));
+      return;
+    }
+    if (typeof node === 'object') Object.keys(node).forEach(k => walk(node[k], depth + 1));
+  };
+  walk(payload, 0);
+  return found;
+}
+
+const toYuan = v => {
+  const n = Number(String(v).replace(/[^\d.\-]/g, ''));
+  if (!isFinite(n)) return 0;
+  return n >= 200 && Number.isInteger(n) ? round2(n / 100) : round2(n);
+};
+
+function guessCat(name){
+  const s = String(name);
+  if (/(汉堡|堡|卷|三明治|麦满分|帕尼尼|鸡排|鸡腿|鸡块|牛堡|鱼堡|双拼)/.test(s)) return 'main';
+  if (/(可乐|雪碧|芬达|红茶|绿茶|咖啡|拿铁|牛奶|豆浆|果汁|橙汁|水|茶)/.test(s)) return 'drink';
+  if (/(冰淇淋|新地|麦旋风|圆筒|派|蛋糕|甜品|圣代)/.test(s)) return 'dessert';
+  return 'side';
+}
+
+function matchNutrition(name){
+  if (!name) return null;
+  const key = String(name).replace(/\s/g, '');
+  let hit = official.nutrition.find(n => String(n.productName || n.name || '').replace(/\s/g, '') === key);
+  if (hit) return hit;
+  return official.nutrition.find(n => {
+    const k = String(n.productName || n.name || '').replace(/\s/g, '');
+    return k && (key.indexOf(k) >= 0 || k.indexOf(key) >= 0);
+  }) || null;
+}
+
+/* 官方菜单是「分类引用 code + meals 码表」结构：categories[].meals[].code → meals[code] = {name,currentPrice} */
+const COMBO_CAT = /(拼盘|多人餐|单人餐|套餐|随心配|组合)/;
+
+function catOfCategory(catName, name){
+  const cn = String(catName || '');
+  if (/冰品|冰淇淋|甜品|蛋糕|派|新地|麦旋风/.test(cn)) return 'dessert';
+  if (/饮品|饮料|咖啡|茶/.test(cn)) return 'drink';
+  if (/炸鸡|小食|配餐|薯条|鸡块/.test(cn)) return 'side';
+  if (/汉堡|堡|卷/.test(cn)) return 'main';
+  return guessCat(name);
+}
+
+/* query-meals → 统一餐品数组 [{productCode,name,price,cat,tags}] */
+function parseMealsPayload(out){
+  const d = out ? out.data : null;
+  let obj = d;
+  if (typeof d === 'string'){ try{ obj = JSON.parse(d); }catch(e){ obj = null; } }
+  const map = obj && typeof obj === 'object' && obj.meals && typeof obj.meals === 'object' ? obj.meals : null;
+  if (!map) return legacyOfficialProducts(out);
+
+  const cats = Array.isArray(obj.categories) ? obj.categories : [];
+  const items = [];
+  const seen = new Set();
+  const push = (code, catName, tags) => {
+    const key = String(code == null ? '' : code).trim();
+    if (!key || seen.has(key)) return;
+    const m = map[key];
+    if (!m || typeof m !== 'object') return;
+    const name = m.name || m.productName || m.mealName;
+    const priceRaw = m.currentPrice !== undefined ? m.currentPrice : (m.price !== undefined ? m.price : m.originalPrice);
+    if (!name || priceRaw === undefined || priceRaw === null) return;
+    const price = toYuan(priceRaw);
+    if (!(price > 0)) return;
+    seen.add(key);
+    items.push({
+      productCode: key, code: key, name: String(name), price: price,
+      cat: catOfCategory(catName, name),
+      tags: Array.isArray(m.tags) ? m.tags : (Array.isArray(tags) ? tags : [])
+    });
+  };
+
+  cats.forEach(c => {
+    const cn = String((c && c.name) || '');
+    if (COMBO_CAT.test(cn)) return;   /* 套餐/拼盘不拆开算，避免一件顶一餐 */
+    ((c && c.meals) || []).forEach(m => push(m && (m.code || m.productCode), cn, m && m.tags));
+  });
+  if (!items.length) Object.keys(map).forEach(k => push(k, '', map[k] && map[k].tags));
+  return items;
+}
+
+/* 兼容旧格式（TOON 行 / 扁平数组） */
+function legacyOfficialProducts(out){
+  const text = out && out.text ? out.text : '';
+  const recs = recordsOf(parseToolPayload(text));
+  return recs.map(r => {
+    const name = pick(r, ['productName', 'mealName', 'name', 'title']);
+    const code = pick(r, ['productCode', 'code', 'skuCode', 'id']);
+    const priceRaw = pick(r, ['currentPrice', 'salePrice', 'price', 'promotionPrice', 'unitPrice']);
+    if (!name || code === undefined || priceRaw === undefined) return null;
+    const price = toYuan(priceRaw);
+    if (!(price > 0)) return null;
+    return {productCode: String(code), code: String(code), name: String(name), price: price, cat: guessCat(name), tags: []};
+  }).filter(Boolean);
+}
+
+function buildOfficialMenu(){
+  const items = [];
+  const seen = new Set();
+  (official.products || []).forEach(p => {
+    const name = p.name || pick(p, ['productName', 'mealName', 'title']);
+    const rawCode = p.productCode !== undefined ? p.productCode : (p.code !== undefined ? p.code : pick(p, ['productCode', 'code', 'skuCode', 'id']));
+    if (!name || rawCode === undefined) return;
+    const key = String(rawCode);
+    if (seen.has(key)) return;
+    const priceRaw = p.price !== undefined ? p.price : pick(p, ['salePrice', 'currentPrice', 'price', 'promotionPrice', 'unitPrice', 'originalPrice']);
+    if (priceRaw === undefined) return;
+    const price = toYuan(priceRaw);
+    if (!(price > 0)) return;
+    seen.add(key);
+    const nut = matchNutrition(name) || {};
+    items.push({
+      id: 'off_' + key,
+      productCode: key,
+      name: String(name),
+      cat: p.cat || guessCat(name),
+      price: price,
+      kcal: Number(nut.energyKcal || 0) || 0,
+      p: Number(nut.protein || 0) || 0,
+      f: Number(nut.fat || 0) || 0,
+      c: Number(nut.carbohydrate || 0) || 0,
+      na: Number(nut.sodium || 0) || 0,
+      sat: 3,
+      official: true
+    });
+  });
+  return items;
+}
+
+/* --- 取餐方式 → 官方参数 --- */
+function orderParams(){
+  const p = state.pickup;
+  if (p === 'delivery') return {orderType: 2, beType: 2, label: '外送'};
+  if (p === 'drivethru') return {orderType: 1, beType: 5, label: '得来速'};
+  return {orderType: 1, beType: 1, label: '到店自取'};
+}
+
+function currentStoreCode(){
+  return official.realStore && official.realStore.code ? String(official.realStore.code) : '';
+}
+/* 当前取餐方式是否能用真实门店数据（外送要收货地址，官方接口拿不到） */
+function realDataPickupOk(){
+  return state.pickup !== 'delivery';
+}
+
+/* --- 真实门店：状态条（就在门店下拉下面） --- */
+function realStoreName(s){
+  return String((s && s.name) || '').replace(/^麦当劳/, '');
+}
+
+function renderRealStore(){
+  const bar = $('#realBar');
+  const more = $('#btnMoreStore');
+  const store = official.realStore;
+  const sync = official.sync || {status: 'idle', msg: ''};
+  const n = OFFICIAL_MENU ? OFFICIAL_MENU.length : 0;
+  const stale = !!(sync.status === 'ok' && official.menuPickup && official.menuPickup !== state.pickup);
+
+  if (more){
+    more.innerHTML = '<span class="sm-plus">＋</span><span>'
+      + (store ? '换一家真实门店' : '列表里没有？搜这个城市的真实门店') + '</span>';
+  }
+
+  const fine = $('#homeFine');
+  if (fine){
+    fine.textContent = OFFICIAL_MENU
+      ? '当前用的是真实门店的官方餐品与价格，营养值来自官方营养表。最终价格、优惠与库存以麦当劳官方 App 为准，本工具不代下单。'
+      : '价格为示例数据，不同城市与门店会有差异；营养值为估算。最终价格、优惠与库存以麦当劳官方 App 为准，本工具不代下单。';
+  }
+
+  if (!bar) return;
+  if (!store && sync.status !== 'fail'){
+    bar.className = 'real-bar hide';
+    bar.innerHTML = '';
+    return;
+  }
+
+  bar.className = 'real-bar';
+  let html = '';
+  if (sync.status === 'run'){
+    bar.classList.add('run');
+    html = '<span class="rb-dot"></span><span class="rb-main">正在拉这家店的餐品和价格…</span>';
+  } else if (sync.status === 'fail'){
+    bar.classList.add('warn');
+    const storeFault = /关闭|营业时间|门店|不支持/.test(sync.msg || '');
+    html = '<span class="rb-dot"></span><span class="rb-main">'
+      + (storeFault ? '这家店暂时拉不到菜单：' : '没连上官方接口：')
+      + esc(sync.msg || '网络异常') + '</span>'
+      + '<button class="rb-act" type="button" data-real="change">换一家</button>'
+      + '<button class="rb-act" type="button" data-real="refresh">重试</button>';
+  } else if (stale){
+    bar.classList.add('warn');
+    html = '<span class="rb-dot"></span><span class="rb-main">取餐方式变了，价格要重新拉一次</span>'
+      + '<button class="rb-act" type="button" data-real="refresh">刷新</button>';
+  } else if (sync.status === 'ok' && n){
+    html = '<span class="rb-dot"></span><span class="rb-main">真实价格 · <b>' + esc(realStoreName(store))
+      + '</b> · ' + n + ' 件可选</span>'
+      + '<button class="rb-act" type="button" data-real="refresh">刷新</button>';
+  } else if (sync.status === 'ok' && !n){
+    bar.classList.add('warn');
+    html = '<span class="rb-dot"></span><span class="rb-main">这家店的餐品没识别出来，仍用示例菜单</span>'
+      + '<button class="rb-act" type="button" data-real="refresh">重试</button>';
+  } else {
+    html = '<span class="rb-dot"></span><span class="rb-main">已选 <b>' + esc(realStoreName(store))
+      + '</b>，还没同步</span>'
+      + '<button class="rb-act" type="button" data-real="refresh">同步</button>';
+  }
+  bar.innerHTML = html;
+}
+
+/* --- 真实门店：搜这个城市的门店 --- */
+function defaultStoreKeyword(){
+  const st = findStore(state.storeId);
+  const city = cityOfStore(st.id);
+  let s = String((st && st.name) || '').replace('麦当劳', '').replace(/[（）]/g, '');
+  if (city && city.name && s.indexOf(city.name) === 0) s = s.slice(city.name.length);
+  s = s.replace(/店$/, '');
+  return s || (city ? city.name : '');
+}
+
+/* 这个城市的示例门店名，当作搜索关键字候选 */
+function cityKeywords(){
+  const city = cityOfStore(state.storeId);
+  const out = [];
+  (city.stores || []).forEach(s => {
+    let k = String(s.name || '').replace('麦当劳', '').replace(city.name, '')
+      .replace(/[（）]/g, '').replace(/餐厅$|店$/, '').trim();
+    if (k && out.indexOf(k) < 0) out.push(k);
+  });
+  return out.slice(0, 6);
+}
+
+function openRealSheet(){
+  if (!realDataPickupOk()){
+    toast('外送查不到官方门店，先切到「到店自取」或「得来速」');
+    return;
+  }
+  const city = cityOfStore(state.storeId);
+  const sub = $('#realSub');
+  if (sub) sub.textContent = '正在查「' + city.name + '」的门店。选中一家，餐品和价格就直接换成这家店的真实数据。';
+  const seed = defaultStoreKeyword() || city.name;
+  const kw = $('#realKw');
+  if (kw){
+    kw.value = seed;
+    kw.placeholder = '商圈或路名，如 ' + seed;
+  }
+  const quick = $('#realQuick');
+  if (quick){
+    const names = cityKeywords();
+    quick.innerHTML = names.map(x => '<button type="button" data-kw="' + esc(x) + '">' + esc(x) + '</button>').join('');
+    quick.classList.toggle('hide', !names.length);
+  }
+  const list = $('#realList');
+  if (list) list.innerHTML = '';
+  openSheet('#realSheet');
+  searchRealStores(seed);
+}
+
+function renderRealList(){
+  const list = $('#realList');
+  if (!list) return;
+  if (!official.candidates.length){
+    list.innerHTML = '<div class="real-empty">没查到门店。官方一次最多返回 5 家，换更具体的地标再搜，'
+      + '比如「合肥南站」「人民广场」「天河城」；也可以只搜「火车站」「机场」这类大地标。</div>';
+    return;
+  }
+  list.innerHTML = official.candidates.map(c =>
+    '<button class="real-item" type="button" data-code="' + esc(c.code) + '">'
+      + '<span style="min-width:0"><span class="ri-n">' + esc(String(c.name || '').replace(/^麦当劳/, '')) + '</span>'
+      + '<span class="ri-m">官方门店 · 详细地址在麦当劳官方 App 查看</span></span>'
+      + '<span class="ri-k">' + (c.distance !== undefined && c.distance !== '' ? esc(c.distance) + 'm<br>' : '')
+      + esc(c.code) + '</span>'
+    + '</button>').join('');
+}
+
+async function searchRealStores(keyword){
+  const list = $('#realList');
+  const btn = $('#btnRealSearch');
+  const city = cityOfStore(state.storeId);
+  const pr = orderParams();
+  const beType = pr.beType === 5 ? 5 : 1;
+  const kwEl = $('#realKw');
+  const kw = String(keyword == null ? ((kwEl && kwEl.value) || '') : keyword).trim() || city.name;
+
+  if (list) list.innerHTML = '<div class="real-empty">正在查「' + esc(city.name) + '」的门店…</div>';
+  if (btn){ btn.disabled = true; btn.textContent = '查询中'; }
+  try{
+    const out = await mcdCallFull('query-nearby-stores', {beType: beType, searchType: 2, city: city.name, keyword: kw});
+    if (!out.ok) throw new Error(out.message || '官方没返回门店');
+    official.candidates = storeRecordsFrom(out, beType);
+    renderRealList();
+  }catch(e){
+    if (list){
+      list.innerHTML = '<div class="real-empty"><b>这次没查到</b><br>' + esc(e.message || '网络异常')
+        + '<br><span style="color:var(--ink3)">多半是这会儿连不上官方接口，跟你的条件没关系。先用上面的示例门店算，结果一样能用；过会儿再点一次就行。</span>'
+        + '<br><button type="button" data-real="retry">再试一次</button></div>';
+    }
+  }finally{
+    if (btn){ btn.disabled = false; btn.textContent = '搜索'; }
+  }
+}
+
+/* 官方门店列表 → 统一结构 */
+function storeRecordsFrom(out, beType){
+  return recordsFrom(out).slice(0, 12).map(r => ({
+    code: String(pick(r, ['storeCode', 'storeId', 'code']) || ''),
+    name: String(pick(r, ['storeName', 'name']) || ''),
+    address: String(pick(r, ['address', 'storeAddress']) || ''),
+    distance: pick(r, ['distance']),
+    beCode: String(pick(r, ['beCode']) || ''),
+    beType: beType
+  })).filter(c => c.code && c.name);
+}
+
+/* 从门店名推搜索关键词：麦当劳上海黄浦华旭国际大厦餐厅 → 黄浦华旭国际大厦 */
+function storeKeywordOf(s){
+  const city = cityOfStore(state.storeId);
+  let k = String((s && s.name) || '').replace('麦当劳', '').replace(city.name, '')
+    .replace(/得来速|餐厅|店/g, '').replace(/[（）]/g, '').trim();
+  return k;
+}
+
+async function pickRealStore(code){
+  const c = official.candidates.find(x => String(x.code) === String(code));
+  if (!c) return;
+  official.realStore = c;
+  official.candidates = [];
+  official.lastSync = 0;
+  official.sync = {status: 'idle', msg: ''};
+  OFFICIAL_MENU = null;
+  saveOfficial();
+  closeSheets();
+  renderStore();
+  toast('已换成 ' + realStoreName(c) + '，正在拉真实菜单');
+  await syncRealStore();
+}
+
+/* 退出真实门店，回到示例门店 */
+function clearRealStore(){
+  if (!official.realStore && !OFFICIAL_MENU) return;
+  official.realStore = null;
+  official.products = [];
+  official.nutrition = [];
+  official.storeCoupons = [];
+  official.myCoupons = [];
+  official.lastSync = 0;
+  official.menuPickup = '';
+  official.sync = {status: 'idle', msg: ''};
+  OFFICIAL_MENU = null;
+  saveOfficial();
+}
+
+/* 换取餐方式后重配门店：得来速是另一批餐厅（要 beCode），自动换到最近的一家 */
+async function rematchPickup(){
+  const store = official.realStore;
+  if (!store) return;
+  const pr = orderParams();
+  if (store.beType === pr.beType){ syncRealStore(); return; }
+  const city = cityOfStore(state.storeId);
+  official.busy = true;
+  official.sync = {status: 'run', msg: ''};
+  renderRealStore();
+  try{
+    const kw = storeKeywordOf(store) || defaultStoreKeyword() || city.name;
+    const out = await mcdCallFull('query-nearby-stores', {beType: pr.beType, searchType: 2, city: city.name, keyword: kw});
+    if (!out.ok) throw new Error(out.message || '官方没返回门店');
+    const recs = storeRecordsFrom(out, pr.beType);
+    if (!recs.length) throw new Error('附近没有得来速餐厅');
+    official.realStore = recs[0];
+    official.sync = {status: 'idle', msg: ''};
+    saveOfficial();
+    official.busy = false;
+    renderStore();
+    toast('已自动换到最近的得来速餐厅：' + realStoreName(recs[0]));
+    await syncRealStore();
+  }catch(e){
+    clearRealStore();
+    official.busy = false;
+    renderStore();
+    toast('得来速没接上官方数据，先回到示例门店，也可以重新搜');
+  }
+}
+
+/* --- 同步真实门店的餐品与价格（选完门店自动跑，不展示步骤） --- */
+async function syncRealStore(){
+  const store = official.realStore;
+  if (!store || !store.code){ toast('先搜一家真实门店'); return; }
+  if (!realDataPickupOk()){ toast('外送查不到官方门店，先切到「到店自取」或「得来速」'); return; }
+  /* 正在拉的时候又换了店/取餐方式：记一笔，等这次结束后自动按最新条件再拉一次 */
+  if (official.busy){ official.queued = true; return; }
+
+  const pr = orderParams();
+  official.busy = true;
+  official.sync = {status: 'run', msg: ''};
+  official.products = [];
+  official.nutrition = [];
+  official.storeCoupons = [];
+  official.myCoupons = [];
+  official.lastSync = 0;
+  OFFICIAL_MENU = null;
+  renderRealStore();
+
+  const args = {storeCode: store.code, orderType: pr.orderType, beType: pr.beType};
+  if (store.beCode && pr.beType !== 1) args.beCode = store.beCode;
+
+  try{
+    const meals = await mcdCallFull('query-meals', args);
+    official.products = parseMealsPayload(meals);
+    if (!official.products.length) throw new Error(meals.message || '官方没返回餐品');
+
+    try{
+      const nut = await mcdCallFull('list-nutrition-foods', {});
+      official.nutrition = recordsFrom(nut);
+    }catch(e){ /* 营养表拿不到不影响价格 */ }
+
+    try{
+      const sc = await mcdCallFull('query-store-coupons', args);
+      official.storeCoupons = recordsFrom(sc);
+    }catch(e){ /* 券拿不到不影响价格 */ }
+
+    const menu = buildOfficialMenu();
+    if (menu.length >= 8){
+      OFFICIAL_MENU = menu;
+      official.menuPickup = state.pickup;
+    } else {
+      OFFICIAL_MENU = null;
+      official.menuPickup = '';
+    }
+    official.lastSync = Date.now();
+    official.sync = {status: 'ok', msg: ''};
+    saveOfficial();
+    toast(OFFICIAL_MENU
+      ? ('已换成 ' + realStoreName(store) + ' 的真实价格 · ' + OFFICIAL_MENU.length + ' 件可选')
+      : '这家店的餐品没识别出来，先用示例菜单');
+  }catch(e){
+    official.sync = {status: 'fail', msg: e.message || '网络异常'};
+    saveOfficial();
+    toast(/关闭|营业时间|门店|不支持/.test(e.message || '')
+      ? '这家店暂时拉不到菜单，点状态条上的「换一家」选别的店'
+      : '没连上官方接口，点状态条上的「重试」再来一次');
+  }finally{
+    official.busy = false;
+    renderStore();
+    renderChips();
+    saveLocal();
+    if (decks) auditVisible();
+    if (official.queued){ official.queued = false; syncRealStore(); }
+  }
+}
+
+/* --- 第 4 步：官方核价（三组方案每张都核） --- */
+async function priceQuote(ev){
+  const storeCode = currentStoreCode();
+  if (!storeCode) throw new Error('还没选真实门店');
+  const pr = orderParams();
+
+  const items = [];
+  for (const it of ev.items){
+    let code = it.productCode;
+    if (!code){
+      const hit = official.products.find(p => String(p.name || pick(p, ['productName', 'mealName']) || '') === it.name);
+      if (hit) code = hit.productCode !== undefined ? hit.productCode : pick(hit, ['productCode', 'code', 'skuCode', 'id']);
+    }
+    if (!code) throw new Error('「' + it.name + '」没有官方商品编码');
+    items.push({productCode: String(code), quantity: 1});
+  }
+
+  const out = await mcdCallFull('calculate-price', {
+    storeCode: storeCode,
+    orderType: pr.orderType,
+    beType: pr.beType,
+    needTableware: false,
+    items: items
+  });
+
+  let d = out.data && typeof out.data === 'object' ? out.data : null;
+  if (!d){
+    const parsed = parseToolPayload(out.text) || {};
+    d = (parsed && typeof parsed === 'object' && parsed.data) ? parsed.data : parsed;
+  }
+  const pay = toYuan(d.price !== undefined ? d.price : d.totalPrice);
+  const orig = toYuan(d.originalPrice !== undefined ? d.originalPrice : d.productOriginalPrice);
+  const off = toYuan(d.discount || 0);
+  if (!pay && !orig) throw new Error(out.message || '官方没返回金额');
+
+  /* 优惠券还是本地示例券，官方结算不会叠加，所以比对「原价合计」 */
+  const base = orig || pay;
+  const diff = round2(base - ev.subtotal);
+  return {
+    status: Math.abs(diff) < 0.01 ? 'ok' : 'diff',
+    pay: pay,
+    orig: base,
+    off: off,
+    diff: diff,
+    note: ev.discount > 0
+      ? '上面的「' + (ev.coupon ? ev.coupon.name : '优惠券') + '」是示例券，官方结算里不会叠加；这里比的是原价合计。'
+      : '',
+    at: Date.now()
+  };
+}
+
+/* 核一组当前展示的方案；同一套餐 10 分钟内不重复请求 */
+async function verifyPlan(groupKey, force){
+  if (!canAudit() || !decks) return null;
+  const deck = decks.decks[groupKey] || [];
+  if (!deck.length) return null;
+  const pick = deck[deckIdx[groupKey] % deck.length];
+  const sig = pick.sig;
+  const rec = decks.checks[sig];
+
+  if (!force && rec && rec.status !== 'fail' && rec.at && (Date.now() - rec.at < 10 * 60 * 1000)) return rec;
+  if (official.inflight[sig]) return rec || null;
+
+  official.inflight[sig] = true;
+  decks.checks[sig] = {status: 'pending', at: Date.now()};
+  renderCards();
+  try{
+    decks.checks[sig] = await priceQuote(pick.ev);
+  }catch(e){
+    decks.checks[sig] = {status: 'fail', msg: e.message || '请求失败', at: Date.now()};
+  }finally{
+    delete official.inflight[sig];
+    renderCards();
+  }
+  return decks.checks[sig];
+}
+
+/* 每次出方案 / 换一组后，三组各核一次 */
+async function auditVisible(){
+  if (!decks) return;
+  if (!canAudit()){ updateAuditBar(); return; }
+  updateAuditBar();
+  for (const g of GROUPS){
+    if (!(decks.decks[g.key] || []).length) continue;
+    await verifyPlan(g.key, false);
+  }
+  updateAuditBar();
+}
+
+/* --- 事件绑定：门店下面的「搜真实门店」 --- */
+function bindOfficial(){
+  const more = $('#btnMoreStore');
+  if (more) more.addEventListener('click', openRealSheet);
+
+  const btnSearch = $('#btnRealSearch');
+  const kw = $('#realKw');
+  if (btnSearch) btnSearch.addEventListener('click', () => searchRealStores());
+  if (kw){
+    kw.addEventListener('keydown', e => {
+      if (e.key === 'Enter'){ e.preventDefault(); kw.blur(); searchRealStores(); }
+    });
+  }
+
+  const quick = $('#realQuick');
+  if (quick){
+    quick.addEventListener('click', e => {
+      const b = e.target.closest('button[data-kw]');
+      if (!b) return;
+      if (kw) kw.value = b.dataset.kw;
+      searchRealStores(b.dataset.kw);
+    });
+  }
+
+  const list = $('#realList');
+  if (list){
+    list.addEventListener('click', e => {
+      const item = e.target.closest('.real-item');
+      if (item && item.dataset.code){ pickRealStore(item.dataset.code); return; }
+      if (e.target.closest('[data-real="retry"]')) searchRealStores();
+    });
+  }
+
+  const bar = $('#realBar');
+  if (bar){
+    bar.addEventListener('click', e => {
+      if (e.target.closest('[data-real="refresh"]')) syncRealStore();
+      if (e.target.closest('[data-real="change"]')) openRealSheet();
+    });
+  }
+}
+
+
+function boot(){
+  $('#quickBudget').innerHTML = [15, 20, 25, 30, 40, 50].map(v => '<button data-v="' + v + '">¥' + v + '</button>').join('');
+  loadOfficial();
+  restoreOfficialMenu();
+  savedCount = localPlans().length;
+  renderAll();
+  bind();
+  bindOfficial();
+  initCloud();
+  renderCloudChip();
+  restoreAuth();
+}
+
+/* 刷新页面后，把上次同步的真实菜单还原出来，别让用户重新拉一遍 */
+function restoreOfficialMenu(){
+  if (!official.realStore || !official.products.length) return;
+  const menu = buildOfficialMenu();
+  if (menu.length < 8) return;
+  OFFICIAL_MENU = menu;
+  official.sync = {status: 'ok', msg: ''};
+}
+boot();
+</script>
+</body>
+</html>

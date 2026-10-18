@@ -1,0 +1,490 @@
+{
+  "source": "麦麦点前算 index.html (v2.7)",
+  "currency": "CNY",
+  "menu": [
+    {
+      "id": "bigmac",
+      "name": "巨无霸",
+      "cat": "main",
+      "price": 25.5,
+      "kcal": 550,
+      "p": 26,
+      "f": 32,
+      "c": 45,
+      "na": 950,
+      "sat": 5
+    },
+    {
+      "id": "grilled",
+      "name": "板烧鸡腿堡",
+      "cat": "main",
+      "price": 24.5,
+      "kcal": 470,
+      "p": 25,
+      "f": 20,
+      "c": 46,
+      "na": 780,
+      "sat": 4
+    },
+    {
+      "id": "baconbeef",
+      "name": "培根蔬萃双层牛堡",
+      "cat": "main",
+      "price": 27,
+      "kcal": 480,
+      "p": 27,
+      "f": 22,
+      "c": 42,
+      "na": 880,
+      "sat": 4
+    },
+    {
+      "id": "spicy",
+      "name": "麦辣鸡腿堡",
+      "cat": "main",
+      "price": 21.5,
+      "kcal": 520,
+      "p": 24,
+      "f": 26,
+      "c": 46,
+      "na": 900,
+      "sat": 4
+    },
+    {
+      "id": "doublech",
+      "name": "双层吉士汉堡",
+      "cat": "main",
+      "price": 19.5,
+      "kcal": 450,
+      "p": 24,
+      "f": 23,
+      "c": 34,
+      "na": 850,
+      "sat": 4
+    },
+    {
+      "id": "mcchicken",
+      "name": "麦香鸡",
+      "cat": "main",
+      "price": 16.5,
+      "kcal": 400,
+      "p": 19,
+      "f": 20,
+      "c": 40,
+      "na": 700,
+      "sat": 3
+    },
+    {
+      "id": "mcfillet",
+      "name": "麦香鱼",
+      "cat": "main",
+      "price": 16.5,
+      "kcal": 340,
+      "p": 14,
+      "f": 15,
+      "c": 38,
+      "na": 580,
+      "sat": 3
+    },
+    {
+      "id": "cheese",
+      "name": "吉士汉堡",
+      "cat": "main",
+      "price": 13.5,
+      "kcal": 310,
+      "p": 15,
+      "f": 14,
+      "c": 31,
+      "na": 620,
+      "sat": 3
+    },
+    {
+      "id": "nug10",
+      "name": "麦乐鸡 10 块",
+      "cat": "side",
+      "price": 27,
+      "kcal": 420,
+      "p": 28,
+      "f": 24,
+      "c": 22,
+      "na": 920,
+      "sat": 5
+    },
+    {
+      "id": "friesL",
+      "name": "大薯条",
+      "cat": "side",
+      "price": 15,
+      "kcal": 460,
+      "p": 5,
+      "f": 22,
+      "c": 60,
+      "na": 330,
+      "sat": 4
+    },
+    {
+      "id": "nug5",
+      "name": "麦乐鸡 5 块",
+      "cat": "side",
+      "price": 14.5,
+      "kcal": 210,
+      "p": 14,
+      "f": 12,
+      "c": 11,
+      "na": 460,
+      "sat": 4,
+      "pair": 1
+    },
+    {
+      "id": "wings",
+      "name": "麦辣鸡翅 2 块",
+      "cat": "side",
+      "price": 13.5,
+      "kcal": 210,
+      "p": 12,
+      "f": 14,
+      "c": 8,
+      "na": 520,
+      "sat": 4
+    },
+    {
+      "id": "friesM",
+      "name": "中薯条",
+      "cat": "side",
+      "price": 12.5,
+      "kcal": 340,
+      "p": 4,
+      "f": 16,
+      "c": 44,
+      "na": 250,
+      "sat": 4,
+      "pair": 1
+    },
+    {
+      "id": "salad",
+      "name": "蔬菜沙拉（无酱）",
+      "cat": "side",
+      "price": 11,
+      "kcal": 45,
+      "p": 2,
+      "f": 1,
+      "c": 8,
+      "na": 60,
+      "sat": 1
+    },
+    {
+      "id": "corn",
+      "name": "玉米杯",
+      "cat": "side",
+      "price": 9.5,
+      "kcal": 130,
+      "p": 4,
+      "f": 2,
+      "c": 27,
+      "na": 90,
+      "sat": 2,
+      "pair": 1
+    },
+    {
+      "id": "apple",
+      "name": "苹果片",
+      "cat": "side",
+      "price": 8,
+      "kcal": 35,
+      "p": 0,
+      "f": 0,
+      "c": 9,
+      "na": 0,
+      "sat": 1,
+      "pair": 1
+    },
+    {
+      "id": "latte",
+      "name": "拿铁",
+      "cat": "drink",
+      "price": 18,
+      "kcal": 120,
+      "p": 6,
+      "f": 6,
+      "c": 10,
+      "na": 90,
+      "sat": 3
+    },
+    {
+      "id": "oj",
+      "name": "橙汁",
+      "cat": "drink",
+      "price": 13,
+      "kcal": 150,
+      "p": 2,
+      "f": 0,
+      "c": 35,
+      "na": 10,
+      "sat": 2
+    },
+    {
+      "id": "tea",
+      "name": "柠檬茶",
+      "cat": "drink",
+      "price": 13,
+      "kcal": 140,
+      "p": 0,
+      "f": 0,
+      "c": 35,
+      "na": 15,
+      "sat": 3,
+      "pair": 1
+    },
+    {
+      "id": "coffee",
+      "name": "鲜煮咖啡",
+      "cat": "drink",
+      "price": 12,
+      "kcal": 5,
+      "p": 0,
+      "f": 0,
+      "c": 0,
+      "na": 5,
+      "sat": 2,
+      "pair": 1
+    },
+    {
+      "id": "coke",
+      "name": "可口可乐（中）",
+      "cat": "drink",
+      "price": 9.5,
+      "kcal": 200,
+      "p": 0,
+      "f": 0,
+      "c": 52,
+      "na": 30,
+      "sat": 3,
+      "pair": 1
+    },
+    {
+      "id": "cokezero",
+      "name": "零度可乐（中）",
+      "cat": "drink",
+      "price": 9.5,
+      "kcal": 0,
+      "p": 0,
+      "f": 0,
+      "c": 0,
+      "na": 40,
+      "sat": 2,
+      "pair": 1
+    },
+    {
+      "id": "sprite",
+      "name": "雪碧（中）",
+      "cat": "drink",
+      "price": 9.5,
+      "kcal": 190,
+      "p": 0,
+      "f": 0,
+      "c": 48,
+      "na": 60,
+      "sat": 3,
+      "pair": 1
+    },
+    {
+      "id": "milk",
+      "name": "纯牛奶",
+      "cat": "drink",
+      "price": 8,
+      "kcal": 130,
+      "p": 7,
+      "f": 7,
+      "c": 10,
+      "na": 100,
+      "sat": 2,
+      "pair": 1
+    },
+    {
+      "id": "water",
+      "name": "矿泉水",
+      "cat": "drink",
+      "price": 6,
+      "kcal": 0,
+      "p": 0,
+      "f": 0,
+      "c": 0,
+      "na": 0,
+      "sat": 1,
+      "pair": 1
+    },
+    {
+      "id": "mcflurry",
+      "name": "麦旋风（奥利奥）",
+      "cat": "dessert",
+      "price": 14,
+      "kcal": 320,
+      "p": 6,
+      "f": 12,
+      "c": 45,
+      "na": 180,
+      "sat": 4
+    },
+    {
+      "id": "sundae",
+      "name": "新地",
+      "cat": "dessert",
+      "price": 12,
+      "kcal": 280,
+      "p": 5,
+      "f": 9,
+      "c": 42,
+      "na": 120,
+      "sat": 3,
+      "pair": 1
+    },
+    {
+      "id": "pieA",
+      "name": "苹果派",
+      "cat": "dessert",
+      "price": 9,
+      "kcal": 240,
+      "p": 2,
+      "f": 12,
+      "c": 32,
+      "na": 150,
+      "sat": 3,
+      "pair": 1
+    },
+    {
+      "id": "pieT",
+      "name": "香芋派",
+      "cat": "dessert",
+      "price": 9,
+      "kcal": 250,
+      "p": 2,
+      "f": 12,
+      "c": 33,
+      "na": 140,
+      "sat": 3,
+      "pair": 1
+    },
+    {
+      "id": "cone",
+      "name": "圆筒冰淇淋",
+      "cat": "dessert",
+      "price": 6,
+      "kcal": 150,
+      "p": 4,
+      "f": 5,
+      "c": 22,
+      "na": 60,
+      "sat": 3,
+      "pair": 1
+    }
+  ],
+  "coupons": [
+    {
+      "id": "pair11",
+      "name": "随心配 1+1",
+      "desc": "指定小食/饮品/甜品任选 2 件 13.9 元",
+      "type": "pair",
+      "price": 13.9
+    },
+    {
+      "id": "combo6",
+      "name": "组合券立减 6",
+      "desc": "主食 + 小食 + 饮品立减 6 元",
+      "type": "combo",
+      "cats": [
+        "main",
+        "side",
+        "drink"
+      ],
+      "off": 6
+    },
+    {
+      "id": "m30",
+      "name": "满 30 减 5",
+      "desc": "订单满 30 元立减 5 元",
+      "type": "threshold",
+      "min": 30,
+      "off": 5
+    },
+    {
+      "id": "m45",
+      "name": "满 45 减 8",
+      "desc": "订单满 45 元立减 8 元",
+      "type": "threshold",
+      "min": 45,
+      "off": 8
+    },
+    {
+      "id": "nug10",
+      "name": "麦乐鸡 10 块立减 5",
+      "desc": "含麦乐鸡 10 块时立减 5 元",
+      "type": "item",
+      "item": "nug10",
+      "off": 5
+    },
+    {
+      "id": "new3",
+      "name": "新客立减 3",
+      "desc": "首单立减 3 元",
+      "type": "flat",
+      "off": 3
+    },
+    {
+      "id": "tue88",
+      "name": "周二会员日 88 折",
+      "desc": "每周二全场 88 折",
+      "type": "rate",
+      "rate": 0.12,
+      "onlyWeekday": 2
+    }
+  ],
+  "targets": {
+    "any": {
+      "kcal": 720,
+      "protein": 28,
+      "label": "不限",
+      "desc": "不设营养目标，只看吃得爽不爽、划不划算"
+    },
+    "low": {
+      "kcal": 520,
+      "protein": 26,
+      "label": "低卡",
+      "desc": "目标 520 千卡左右，尽量控制在 600 千卡内"
+    },
+    "protein": {
+      "kcal": 820,
+      "protein": 42,
+      "label": "高蛋白",
+      "desc": "目标蛋白质 ≥ 42g，优先鸡牛鱼与牛奶"
+    },
+    "balanced": {
+      "kcal": 700,
+      "protein": 30,
+      "label": "均衡",
+      "desc": "热量与蛋白质兼顾，目标 700 千卡 / 30g 蛋白"
+    }
+  },
+  "daily": {
+    "kcal": 2000,
+    "protein": 60,
+    "fat": 65,
+    "na": 2000
+  },
+  "pickups": {
+    "pickup": {
+      "name": "到店自取",
+      "desc": "手机下单后到柜台或取餐柜自取，不加配送费"
+    },
+    "delivery": {
+      "name": "外送",
+      "desc": "配送费 ¥6，单笔满 ¥39 免配送费（按券后金额算）"
+    },
+    "drivethru": {
+      "name": "得来速",
+      "desc": "开车到车道取餐，不加配送费，出餐稍慢"
+    }
+  },
+  "deliveryFee": 6,
+  "freeDeliveryLine": 39,
+  "kcalToleranceFactor": 0.62
+}

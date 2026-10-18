@@ -1,0 +1,82 @@
+{
+  "$comment": "三个示例的机器可读输入与预期关键数字。预期值来自 scripts/meal_planner.py 的真实输出，可用于回归测试。",
+  "engine": "scripts/meal_planner.py",
+  "data": "references/menu-data.json",
+  "cases": [
+    {
+      "id": "01-budget-first",
+      "title": "预算优先：¥40 不限营养，必吃麦辣鸡腿堡 + 中薯条",
+      "userSays": "预算 40，麦当劳想吃麦辣鸡腿堡加中薯条，怎么点最省？",
+      "input": {
+        "budget": 40,
+        "nutrition": "any",
+        "pickup": "pickup",
+        "want": ["spicy", "friesM"],
+        "avoid": [],
+        "coupon": "prefer",
+        "store": { "delta": 0, "soldout": [] },
+        "weekday": 1
+      },
+      "command": "python3 scripts/meal_planner.py --budget 40 --nutrition any --pickup pickup --want spicy,friesM --coupon prefer --weekday 1",
+      "expect": {
+        "feasible": true,
+        "pool": 16,
+        "groups": {
+          "budget": { "subtotal": 47.0, "discount": 11.6, "pay": 35.4, "kcal": 1000, "protein": 28 },
+          "nutrition": { "subtotal": 43.5, "discount": 8.1, "pay": 35.4, "kcal": 860, "protein": 28 },
+          "taste": { "subtotal": 48.0, "discount": 8.0, "pay": 40.0, "kcal": 1140, "protein": 39 }
+        }
+      }
+    },
+    {
+      "id": "02-no-solution",
+      "title": "无解：¥25 + 高蛋白 + 必吃双层吉士",
+      "userSays": "25 块钱，双层吉士汉堡，要高蛋白。",
+      "input": {
+        "budget": 25,
+        "nutrition": "protein",
+        "pickup": "pickup",
+        "want": ["doublech"],
+        "avoid": [],
+        "coupon": "normal",
+        "store": { "delta": 0, "soldout": [] },
+        "weekday": 1
+      },
+      "command": "python3 scripts/meal_planner.py --budget 25 --nutrition protein --pickup pickup --want doublech --coupon normal --weekday 1",
+      "expect": {
+        "feasible": false,
+        "pool": 0,
+        "inBudget": 4,
+        "proteinGap": 11,
+        "cheapestFeasiblePay": 33.4,
+        "suggestBudget": 34
+      }
+    },
+    {
+      "id": "03-delivery-balanced",
+      "title": "外送均衡：¥60 外送 + 巨无霸 + 忌口苹果片 + 周二",
+      "userSays": "今晚外送，预算 60，要巨无霸，不吃苹果片，均衡一点，周二。",
+      "input": {
+        "budget": 60,
+        "nutrition": "balanced",
+        "pickup": "delivery",
+        "want": ["bigmac"],
+        "avoid": ["apple"],
+        "coupon": "prefer",
+        "store": { "delta": 0, "soldout": [] },
+        "weekday": 2
+      },
+      "command": "python3 scripts/meal_planner.py --budget 60 --nutrition balanced --pickup delivery --want bigmac --avoid apple --coupon prefer --weekday 2",
+      "expect": {
+        "feasible": true,
+        "pool": 45,
+        "menuSize": 26,
+        "groups": {
+          "budget": { "subtotal": 34.5, "discount": 5.0, "deliveryFee": 6.0, "pay": 35.5, "kcal": 800, "protein": 28 },
+          "nutrition": { "subtotal": 47.0, "discount": 8.0, "pay": 39.0, "kcal": 685, "protein": 30 },
+          "taste": { "subtotal": 53.0, "discount": 13.6, "pay": 39.4, "kcal": 900, "protein": 40 }
+        }
+      }
+    }
+  ]
+}

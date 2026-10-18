@@ -1,0 +1,236 @@
+{
+  "opts": {
+    "budget": 40.0,
+    "nutrition": "any",
+    "pickup": "pickup",
+    "want": [
+      "spicy",
+      "friesM"
+    ],
+    "avoid": [],
+    "coupon": "prefer"
+  },
+  "feasible": true,
+  "totalPlans": 60,
+  "inBudget": 16,
+  "poolSize": 16,
+  "decks": {
+    "budget": [
+      {
+        "sig": "friesM|spicy|tea",
+        "total": 35.4,
+        "subtotal": 47.0,
+        "discount": 11.6,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "tea"
+        ],
+        "kcal": 1000,
+        "protein": 28
+      },
+      {
+        "sig": "friesM|spicy|sundae",
+        "total": 35.4,
+        "subtotal": 46.0,
+        "discount": 10.6,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "sundae"
+        ],
+        "kcal": 1140,
+        "protein": 33
+      },
+      {
+        "sig": "coke|friesM|spicy",
+        "total": 35.4,
+        "subtotal": 43.5,
+        "discount": 8.1,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "coke"
+        ],
+        "kcal": 1060,
+        "protein": 28
+      },
+      {
+        "sig": "friesM|spicy|sprite",
+        "total": 35.4,
+        "subtotal": 43.5,
+        "discount": 8.1,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "sprite"
+        ],
+        "kcal": 1050,
+        "protein": 28
+      },
+      {
+        "sig": "coffee|friesM|spicy",
+        "total": 35.4,
+        "subtotal": 46.0,
+        "discount": 10.6,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "coffee"
+        ],
+        "kcal": 865,
+        "protein": 28
+      }
+    ],
+    "nutrition": [
+      {
+        "sig": "cokezero|friesM|spicy",
+        "total": 35.4,
+        "subtotal": 43.5,
+        "discount": 8.1,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "cokezero"
+        ],
+        "kcal": 860,
+        "protein": 28
+      },
+      {
+        "sig": "friesM|spicy|water",
+        "total": 34.0,
+        "subtotal": 40.0,
+        "discount": 6.0,
+        "coupon": "组合券立减 6",
+        "items": [
+          "spicy",
+          "friesM",
+          "water"
+        ],
+        "kcal": 860,
+        "protein": 28
+      },
+      {
+        "sig": "friesM|spicy",
+        "total": 29.0,
+        "subtotal": 34.0,
+        "discount": 5.0,
+        "coupon": "满 30 减 5",
+        "items": [
+          "spicy",
+          "friesM"
+        ],
+        "kcal": 860,
+        "protein": 28
+      },
+      {
+        "sig": "coffee|friesM|spicy",
+        "total": 35.4,
+        "subtotal": 46.0,
+        "discount": 10.6,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "coffee"
+        ],
+        "kcal": 865,
+        "protein": 28
+      },
+      {
+        "sig": "friesM|milk|spicy",
+        "total": 35.4,
+        "subtotal": 42.0,
+        "discount": 6.6,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "milk"
+        ],
+        "kcal": 990,
+        "protein": 35
+      }
+    ],
+    "taste": [
+      {
+        "sig": "cone|friesM|milk|spicy",
+        "total": 40.0,
+        "subtotal": 48.0,
+        "discount": 8.0,
+        "coupon": "满 45 减 8",
+        "items": [
+          "spicy",
+          "friesM",
+          "milk",
+          "cone"
+        ],
+        "kcal": 1140,
+        "protein": 39
+      },
+      {
+        "sig": "cone|friesM|spicy|water",
+        "total": 38.0,
+        "subtotal": 46.0,
+        "discount": 8.0,
+        "coupon": "满 45 减 8",
+        "items": [
+          "spicy",
+          "friesM",
+          "water",
+          "cone"
+        ],
+        "kcal": 1010,
+        "protein": 32
+      },
+      {
+        "sig": "friesM|mcflurry|spicy",
+        "total": 40.0,
+        "subtotal": 48.0,
+        "discount": 8.0,
+        "coupon": "满 45 减 8",
+        "items": [
+          "spicy",
+          "friesM",
+          "mcflurry"
+        ],
+        "kcal": 1180,
+        "protein": 34
+      },
+      {
+        "sig": "friesM|spicy|sundae",
+        "total": 35.4,
+        "subtotal": 46.0,
+        "discount": 10.6,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "sundae"
+        ],
+        "kcal": 1140,
+        "protein": 33
+      },
+      {
+        "sig": "friesM|pieA|spicy",
+        "total": 35.4,
+        "subtotal": 43.0,
+        "discount": 7.6,
+        "coupon": "随心配 1+1",
+        "items": [
+          "spicy",
+          "friesM",
+          "pieA"
+        ],
+        "kcal": 1100,
+        "protein": 30
+      }
+    ]
+  }
+}
