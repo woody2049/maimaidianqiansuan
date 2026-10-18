@@ -9,8 +9,8 @@
 <p align="center">
   <a href="https://maimai-order-calc.app.workbuddy.host/">在线体验</a> ·
   <a href="SKILL.md">Skill 说明</a> ·
-  <a href="mcp-integration.md">MCP 集成</a> ·
-  <a href="workbuddy-conversation.md">开发对话记录</a> ·
+  <a href="MCP_INTEGRATION.md">MCP 集成</a> ·
+  <a href="workbuddy.md">WorkBuddy 对话上下文</a> ·
   <a href="examples/">使用示例</a>
 </p>
 
@@ -38,7 +38,7 @@
 
 它最初是想给自己省两分钟，做完发现真正的价值在**说清取舍**：同一笔预算，为什么这组便宜 5 块但少 10g 蛋白，为什么多花 4 块能正好凑到满减。所以结果页永远给三组，而不是一组「最优解」。
 
-项目通过 WorkBuddy 的对话式开发完成：需求、改版、真机体验复查、上线发布、规则沉淀，全部在一次连续对话里推进，过程记录在 [workbuddy-conversation.md](workbuddy-conversation.md)。
+项目通过 WorkBuddy 的对话式开发完成：需求、改版、真机体验复查、上线发布、规则沉淀，全部在一次连续对话里推进，过程记录在 [workbuddy.md](workbuddy.md)。
 
 ## 功能
 
@@ -91,6 +91,24 @@ cp -r maimai-order-math ~/.workbuddy/skills/
 
 之后在对话里说「预算 30 想吃麦辣鸡腿堡，帮我算怎么点最省」就会命中这个技能。详细说明见 [SKILL.md](SKILL.md)。
 
+### 4. 在 WorkBuddy 里接上麦当劳 MCP
+
+如果你想让 WorkBuddy 直接调用麦当劳 MCP（技能里需要真实价格时），把 [`mcp-config.example.json`](mcp-config.example.json) 的内容填进「连接器 → 自定义连接器 → 配置 MCP」，并把 `${MCD_TOKEN}` 换成自己的 Token：
+
+```json
+{
+  "mcpServers": {
+    "mcd-mcp": {
+      "type": "streamablehttp",
+      "url": "https://mcp.mcd.cn",
+      "headers": { "Authorization": "Bearer ${MCD_TOKEN}" }
+    }
+  }
+}
+```
+
+保存后启用 `mcd-mcp`，就能在对话里查门店、拉菜单、核价。仓库里的这份配置**只有占位符**，不含任何真实令牌。
+
 ## 环境变量
 
 所有密钥只从环境变量读，仓库里不含任何真实 Token。完整模板见 [`.env.example`](.env.example)：
@@ -118,9 +136,11 @@ node app/server.js
 ```
 .
 ├── README.md                  # 本文件：缘起、功能、用法、限制、参赛信息
+├── CONTEST_DECLARATION.md     # 参赛声明（官方原文，未改动）
 ├── SKILL.md                   # Skill 主文件：触发条件、输入 schema、工作流、规则速查
-├── mcp-integration.md         # 麦当劳 MCP 集成：传输层、调用顺序、参数、错误处理
-├── workbuddy-conversation.md  # 开发对话记录：需求如何一步步变成现在这样
+├── MCP_INTEGRATION.md         # 麦当劳 MCP 集成：实际使用的 Server/Tool、调用顺序、参数、错误处理
+├── workbuddy.md               # WorkBuddy 开发对话上下文（专项奖励核验用）
+├── mcp-config.example.json    # 脱敏的 MCP 配置示例（仅环境变量占位符）
 ├── .env.example               # 环境变量模板（不含真实密钥）
 ├── LICENSE                    # MIT
 ├── examples/
@@ -179,14 +199,26 @@ node app/server.js
 
 | 项 | 内容 |
 |---|---|
-| 赛事 | WorkBuddy 应用与 Skill 开发征集（赛事全称以官方提交页为准） |
-| 赛道 | 开发 Skill（场景编号 #57） |
+| 赛事 | 麦当劳程序员创意开发大赛（麦当劳程序员节创意开发大赛） |
+| 主办方 | 金拱门（中国）有限公司 |
+| 赛事时间 | 2026-10-09 10:30 — 2026-10-25 23:59（北京时间） |
+| 排名依据 | 项目在 GitHub 的公开 Star 数；Star 为 0 不进榜，原则上取前 100 名 |
 | 参赛作品 | 麦麦点前算 · `maimai-order-math` |
 | 作品形态 | 可交互网页应用 + 可复用 Skill 包 + 规则引擎脚本 |
 | 在线体验 | https://maimai-order-calc.app.workbuddy.host/ |
-| 提交的 Skill | 本仓库根目录（`SKILL.md` + `references/` + `scripts/`） |
-| 开发方式 | WorkBuddy Agent 模式，全程对话式开发（见 [workbuddy-conversation.md](workbuddy-conversation.md)） |
+| 开发方式 | 腾讯 WorkBuddy Agent 模式，全程对话式开发（见 [workbuddy.md](workbuddy.md)） |
 | 完成时间 | 2026-10-18 |
+
+### 报名必交文件对照
+
+| 官方要求 | 本项目位置 | 状态 |
+|---|---|---|
+| `README.md` | 根目录 | 已提交 |
+| `CONTEST_DECLARATION.md` | 根目录，官方原文未改动 | 已提交 |
+| `MCP_INTEGRATION.md` | 根目录，含实际使用的 Server/Tool、调用流程与业务价值 | 已提交 |
+| `mcp-config.example.json` | 根目录，仅环境变量占位符 | 已提交 |
+| 源代码 | `app/`（网页与服务）、`scripts/`（规则引擎） | 已提交 |
+| `workbuddy.md` | 根目录，WorkBuddy 对话上下文 | 已提交（专项奖励用） |
 
 作品想验证的一件事：**Skill 不该只是提示词模板**。把可执行的规则、可复现的数据、可核对的示例一起打包，别人拿去就能跑出同样的数字，才算真的可复用。
 

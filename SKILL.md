@@ -95,7 +95,7 @@ python3 scripts/meal_planner.py --budget 40 --nutrition any --pickup pickup \
 
 ### 4. 官方价格核验（有真实门店时）
 
-按 [mcp-integration.md](mcp-integration.md) 的顺序调用麦当劳 MCP：周边门店 → 菜单 → 营养表 → 门店券 → `calculate-price` 逐组核价。核价只比**原价合计**，因为本地券是示例券、官方结算不叠加。差异超过 1 分就标注「以官方结果为准」，不要静默改本地数字。
+按 [MCP_INTEGRATION.md](MCP_INTEGRATION.md) 的顺序调用麦当劳 MCP：周边门店 → 菜单 → 营养表 → 门店券 → `calculate-price` 逐组核价。核价只比**原价合计**，因为本地券是示例券、官方结算不叠加。差异超过 1 分就标注「以官方结果为准」，不要静默改本地数字。
 
 ## 关键规则速查
 
@@ -163,7 +163,7 @@ python3 scripts/meal_planner.py --budget 40 --nutrition any --pickup pickup \
 ## 参考文件
 
 - [references/rules.md](references/rules.md)：完整公式、筛选与打分细节、无解诊断的六个方向。
-- [mcp-integration.md](mcp-integration.md)：MCP 调用顺序、参数、错误处理与核价口径。
+- [MCP_INTEGRATION.md](MCP_INTEGRATION.md)：MCP 调用顺序、参数、错误处理与核价口径。
 - [examples/](examples/)：三个完整示例（含真实脚本输出与规则解读）。
 - [references/menu-data.json](references/menu-data.json)：菜单、券、营养目标原始数据。
 - [scripts/meal_planner.py](scripts/meal_planner.py)：可执行规则引擎（与应用 1:1）。
